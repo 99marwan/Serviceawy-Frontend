@@ -7,9 +7,27 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import AddIcon from "@mui/icons-material/Add";
+import { InputAdornment } from "@mui/material";
+import { useState } from "react";
 
 export default function NewService() {
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = useState(false);
+  
+  const [provider, setProvider] = useState("");
+  const [title, setTitle] = useState("");
+
+  const handleAdd = (e) => {
+    e.preventDefault();
+    const service = { provider, title };
+
+    fetch("http://localhost:8000/Services", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(service),
+    }).then(() => {
+      console.log("new service added");
+    });
+  }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -38,25 +56,36 @@ export default function NewService() {
         </Button>
       </div>
       <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>Subscribe</DialogTitle>
-        <DialogContent>
-          <DialogContentText>
-            To subscribe to this website, please enter your email address here.
-            We will send updates occasionally.
-          </DialogContentText>
+        <DialogTitle>New Service</DialogTitle>
+        <DialogContent
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            width: 500,
+            height: 300,
+          }}
+        >
+          <DialogContentText>Add your service data</DialogContentText>
           <TextField
-            autoFocus
-            margin="dense"
-            id="name"
-            label="Email Address"
-            type="email"
             fullWidth
-            variant="standard"
+            margin="normal"
+            id="Provider"
+            label="Provider"
+            value={provider}
+            onChange={(e) => setProvider(e.target.value)}
+          />
+          <TextField
+            margin="normal"
+            id="title"
+            label="title"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
           />
         </DialogContent>
+
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
+          <Button onClick={handleAdd}>Add</Button>
         </DialogActions>
       </Dialog>
     </div>

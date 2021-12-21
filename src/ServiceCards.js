@@ -1,10 +1,11 @@
-import { Button, Card, CardActions, CardContent, CardMedia, Container, Grid, Typography } from "@mui/material";
+import { Button, Card, CardActions, CardContent, CardMedia, Container, Grid, Pagination, Typography } from "@mui/material";
 import NewService from "./NewService";
 import { Link } from "react-router-dom";
 
 const ServiceCards = (props) => {
     const services = props.services;
     const title = props.title;
+  
     
 
     return (
@@ -55,6 +56,19 @@ const ServiceCards = (props) => {
               </Grid>
             ))}
           </Grid>
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "center",
+              paddingTop: 20,
+            }}
+          >
+            <Pagination
+              count={10}
+              color="secondary"
+              sx={{ color: "#ffffff" }}
+            />
+          </div>
         </Container>
       </div>
     );

@@ -3,7 +3,7 @@ import  MenuIcon  from '@mui/icons-material/Menu'
 
 const ApplicationBar = () => {
     return (
-      <AppBar position="static" sx={{ background: "#430f58" }}>
+      <AppBar position="static" sx={{ background: "#c3195d" }}>
         <Toolbar>
           <IconButton
             size="large"
