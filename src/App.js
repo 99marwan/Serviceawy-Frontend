@@ -7,12 +7,12 @@ function App() {
   return (
     <Router>
       <div className="App" style={{ background: "#222831" }}>
-          <ApplicationBar />
-          <Switch>
-            <Route exact path="/">
-              <Home />
-            </Route>
-          </Switch>
+        <Switch>
+          <Route exact path="/">
+            <ApplicationBar />
+            <Home />
+          </Route>
+        </Switch>
       </div>
     </Router>
   );
