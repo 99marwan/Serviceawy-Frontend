@@ -7,7 +7,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import AddIcon from "@mui/icons-material/Add";
-import { InputAdornment } from "@mui/material";
+import { Box, InputAdornment } from "@mui/material";
 import { useState } from "react";
 import { useHistory } from "react-router-dom";
 
@@ -31,17 +31,29 @@ export default function NewService() {
       price,
       serviceID,
     };
+
+    if (
+      serviceProviderUserName === "" ||
+      serviceDescription === "" ||
+      serviceCategory === "" ||
+      price === ""
+    ) {
+      return;
+    }
     
-    fetch("http://localhost:8080/service/addNormalService", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(service),
-    }).then(() => {
-      console.log("new service added");
-      history.push("/");
-      setOpen(false);
-      
-    });
+      fetch("http://localhost:8080/service/addNormalService", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(service),
+      }).then(() => {
+        console.log("new service added");
+        setProvider("")
+        setCategory("")
+        setCategory("")
+        setPrice("")
+        history.push("/");
+        setOpen(false);
+      });
   }
 
   const handleClickOpen = () => {
@@ -49,6 +61,10 @@ export default function NewService() {
   };
 
   const handleClose = () => {
+    setProvider("");
+    setCategory("");
+    setCategory("");
+    setPrice("");
     setOpen(false);
   };
 
@@ -81,6 +97,7 @@ export default function NewService() {
           }}
         >
           <DialogContentText>Add your service data</DialogContentText>
+
           <TextField
             required
             fullWidth
@@ -111,6 +128,7 @@ export default function NewService() {
             margin="normal"
             id="price"
             label="price"
+            type="number"
             value={price}
             onChange={(e) => setPrice(e.target.value)}
           />

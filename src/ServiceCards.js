@@ -7,8 +7,6 @@ const ServiceCards = (props) => {
     const services = props.services;
     const title = props.title;
   
-
-
     return (
       <div className="servcie-card">
         <Container sx={{ py: 2, maxHeight: "100%" }}>
@@ -16,7 +14,7 @@ const ServiceCards = (props) => {
           {/* End hero unit */}
           <Grid container spacing={2}>
             {services.map((service) => (
-              <Grid item key={service.serviceDescription} xs={6} sm={4} md={3}>
+              <Grid item key={service.serviceID} xs={6} sm={4} md={3}>
                 <Card
                   sx={{
                     height: "100%",
