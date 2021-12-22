@@ -80,7 +80,7 @@ export default function NewService() {
         <Button
           variant="contained"
           startIcon={<AddIcon />}
-          sx={{ mt: 3, mr: 4, background: "#430f58" }}
+          sx={{ mt: 3, mr: 4, background: "#bd814b" }}
           onClick={handleClickOpen}
         >
           Add Service

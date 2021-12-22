@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const ApplicationBar = () => {
     return (
-      <AppBar position="static" sx={{ background: "#c3195d" }}>
+      <AppBar position="static" sx={{ background: "#535049" }}>
         <Toolbar>
           <IconButton
             size="large"
@@ -15,7 +15,11 @@ const ApplicationBar = () => {
           >
             <MenuIcon />
           </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, fontFamily: "Exo 2" }}
+          >
             Fiver
           </Typography>
           <Link to={`/login`} style={{ textDecoration: "none" }}>

@@ -10,7 +10,7 @@ const ServiceCards = (props) => {
     return (
       <div className="servcie-card">
         <Container sx={{ py: 2, maxHeight: "100%" }}>
-          <h2 style={{ color: "#ecffa3" }}>{title}</h2>
+          <h2 style={{ color: "#678983" }}>{title}</h2>
           {/* End hero unit */}
           <Grid container spacing={2}>
             {services.map((service) => (
@@ -20,7 +20,8 @@ const ServiceCards = (props) => {
                     height: "100%",
                     display: "flex",
                     flexDirection: "column",
-                    background: "#9ba6a5",
+                    background: "#E6DDC4",
+                    color: "#535049",
                   }}
                 >
                   <CardMedia
@@ -51,9 +52,9 @@ const ServiceCards = (props) => {
 
                   <hr
                     style={{
-                      color: "#000000",
-                      backgroundColor: "#000000",
-                      borderColor: "#000000",
+                      color: "#535049",
+                      backgroundColor: "#535049",
+                      borderColor: "#535049",
                       width: "100%",
                     }}
                   />
