@@ -32,7 +32,9 @@ const Login = () => {
 
   const handleChange = (e) => {
     setAccountType(e.target.value)};
-
+const handleEmail = (e) => {
+  setEmail(e.target.value)
+}
     const handlePassword = (e) => {
       setPassword(e.target.value);
     };
@@ -86,6 +88,7 @@ const Login = () => {
                   label="E-mail"
                   variant="outlined"
                   value={email}
+                  onChange={handleEmail}
                 />
                 <FormControl sx={{ m: 1 }} fullWidth variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">
