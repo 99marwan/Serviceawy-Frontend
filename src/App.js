@@ -6,7 +6,7 @@ import { Slide } from '@mui/material';
 function App() {
   return (
     <Router>
-      <div className="App" style={{ background: "#222831" }}>
+      <div className="App" >
         <Switch>
           <Route exact path="/">
             <ApplicationBar />

@@ -9,23 +9,38 @@ import DialogTitle from "@mui/material/DialogTitle";
 import AddIcon from "@mui/icons-material/Add";
 import { InputAdornment } from "@mui/material";
 import { useState } from "react";
+import { useHistory } from "react-router-dom";
 
 export default function NewService() {
   const [open, setOpen] = useState(false);
   
-  const [provider, setProvider] = useState("");
-  const [title, setTitle] = useState("");
+  const [serviceProviderUserName, setProvider] = useState("");
+  const [serviceDescription, setDescription] = useState("");
+  const [serviceCategory, setCategory] = useState("");
+  const [price, setPrice] = useState("");
+  const [serviceID, setID] = useState(0);
+  const history = useHistory();
 
   const handleAdd = (e) => {
     e.preventDefault();
-    const service = { provider, title };
-
-    fetch("http://localhost:8000/Services", {
+    setID(serviceID + 1);
+    const service = {
+      serviceProviderUserName,
+      serviceDescription,
+      serviceCategory,
+      price,
+      serviceID,
+    };
+    
+    fetch("http://localhost:8080/service/addNormalService", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(service),
     }).then(() => {
       console.log("new service added");
+      history.push("/");
+      setOpen(false);
+      
     });
   }
 
@@ -67,25 +82,45 @@ export default function NewService() {
         >
           <DialogContentText>Add your service data</DialogContentText>
           <TextField
+            required
             fullWidth
             margin="normal"
             id="Provider"
             label="Provider"
-            value={provider}
+            value={serviceProviderUserName}
             onChange={(e) => setProvider(e.target.value)}
           />
           <TextField
+            required
             margin="normal"
-            id="title"
-            label="title"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
+            id="ServiceDescription"
+            label="ServiceDescription"
+            value={serviceDescription}
+            onChange={(e) => setDescription(e.target.value)}
+          />
+          <TextField
+            required
+            margin="normal"
+            id="ServiceCategory"
+            label="ServiceCategory"
+            value={serviceCategory}
+            onChange={(e) => setCategory(e.target.value)}
+          />
+          <TextField
+            required
+            margin="normal"
+            id="price"
+            label="price"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
           />
         </DialogContent>
 
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleAdd}>Add</Button>
+          <Button type="submit" onClick={handleAdd}>
+            Add
+          </Button>
         </DialogActions>
       </Dialog>
     </div>
