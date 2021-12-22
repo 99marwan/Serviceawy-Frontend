@@ -3,6 +3,7 @@ import Home from './Home';
 import ApplicationBar from './ApplicationBar';
 import { Slide } from '@mui/material';
 import Login from './Login';
+import Signup from './Signup';
 
 function App() {
   return (
@@ -15,6 +16,9 @@ function App() {
           </Route>
           <Route exact path="/Login">
             <Login />
+          </Route>
+          <Route exact path="/Signup">
+            <Signup />
           </Route>
         </Switch>
       </div>

@@ -31,7 +31,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
-    setAccountType(e.target.value);
+    setAccountType(e.target.value)};
 
     const handlePassword = (e) => {
       setPassword(e.target.value);
@@ -40,9 +40,7 @@ const Login = () => {
       setShowPassword(!showPassword);
     };
 
-    const handleMouseDownPassword = (event) => {
-      event.preventDefault();
-    };
+    
 
 
 
@@ -86,17 +84,10 @@ const Login = () => {
                   margin="normal"
                   id="E-mail"
                   label="E-mail"
-                  variant="standard"
+                  variant="outlined"
                   value={email}
                 />
-                <TextField
-                  required
-                  fullWidth
-                  id="Password"
-                  label="Password"
-                  variant="standard"
-                />
-                <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
+                <FormControl sx={{ m: 1 }} fullWidth variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">
                     Password
                   </InputLabel>
@@ -104,13 +95,13 @@ const Login = () => {
                     id="outlined-adornment-password"
                     type={showPassword ? "text" : "password"}
                     value={password}
-                    onChange={handlePassword()}
+                    onChange={handlePassword}
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
                           aria-label="toggle password visibility"
                           onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
+                          //onMouseDown={handleMouseDownPassword}
                           edge="end"
                         >
                           {showPassword ? (
@@ -186,7 +177,7 @@ const Login = () => {
                     marginTop: 2,
                   }}
                 >
-                  <Link href="#" variant="body2">
+                  <Link to={"/Signup"} variant="body2">
                     {"Don't have an account? Sign Up"}
                   </Link>
                 </Grid>
@@ -197,5 +188,5 @@ const Login = () => {
       </div>
     );
   };
-}
+
   export default Login;

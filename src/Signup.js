@@ -28,7 +28,22 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
   
   const Signup = () => {
 
-    return ( 
+    const [accountType, setAccountType] = useState("User");
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [showPassword, setShowPassword] = useState(false);
+  
+    const handleChange = (e) => {
+      setAccountType(e.target.value)};
+  
+      const handlePassword = (e) => {
+        setPassword(e.target.value);
+      };
+      const handleClickShowPassword = () => {
+        setShowPassword(!showPassword);
+      };
+
+    return (
 
         <div className="Signup">
             <Container
@@ -68,17 +83,10 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
                   margin="normal"
                   id="E-mail"
                   label="E-mail"
-                  variant="standard"
+                  variant="outlined"
                   value={email}
                 />
-                <TextField
-                  required
-                  fullWidth
-                  id="Password"
-                  label="Password"
-                  variant="standard"
-                />
-                <FormControl sx={{ m: 1, width: "25ch" }} variant="outlined">
+                <FormControl sx={{ m: 1 }} fullWidth variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">
                     Password
                   </InputLabel>
@@ -86,13 +94,13 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
                     id="outlined-adornment-password"
                     type={showPassword ? "text" : "password"}
                     value={password}
-                    onChange={handlePassword("password")}
+                    onChange={handlePassword}
                     endAdornment={
                       <InputAdornment position="end">
                         <IconButton
                           aria-label="toggle password visibility"
                           onClick={handleClickShowPassword}
-                          onMouseDown={handleMouseDownPassword}
+                          //onMouseDown={handleMouseDownPassword}
                           edge="end"
                         >
                           {showPassword ? (
@@ -158,20 +166,8 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
                     backgroundColor: "#c3195d",
                   }}
                 >
-                  Login
+                  Signup
                 </Button>
-                <Grid
-                  item
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-end",
-                    marginTop: 2,
-                  }}
-                >
-                  <Link href="#" variant="body2">
-                    {"Don't have an account? Sign Up"}
-                  </Link>
-                </Grid>
               </CardContent>
             </Card>
           </Grid>
