@@ -28,19 +28,23 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
   
   const Signup = () => {
 
-    const [accountType, setAccountType] = useState("User");
     const [email, setEmail] = useState("");
+    const [username, setUsername] = useState("");
+    const [DOB, setDOB] = useState("");
     const [password, setPassword] = useState("");
-    const [showPassword, setShowPassword] = useState(false);
+
   
-    const handleChange = (e) => {
-      setAccountType(e.target.value)};
-  
+      const handleEmail = (e) => {
+        setEmail(e.target.value);
+      };
       const handlePassword = (e) => {
         setPassword(e.target.value);
       };
-      const handleClickShowPassword = () => {
-        setShowPassword(!showPassword);
+      const handleUsername = (e) => {
+        setUsername(e.target.value);
+      };
+      const handleDOB = (e) => {
+        setDOB(e.target.value);
       };
 
     return (
@@ -85,6 +89,17 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff';
                   label="E-mail"
                   variant="outlined"
                   value={email}
+                  onChange={handleEmail}
+                />
+                <TextField
+                  required
+                  fullWidth
+                  margin="normal"
+                  id="Username"
+                  label="Username"
+                  variant="outlined"
+                  value={username}
+                  onChange={handleUsername}
                 />
                 <FormControl sx={{ m: 1 }} fullWidth variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">
