@@ -7,53 +7,55 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import AddIcon from "@mui/icons-material/Add";
-import { Box, InputAdornment } from "@mui/material";
-import { useState } from "react";
+import { Box, FormControl, InputAdornment, InputLabel, MenuItem, Select } from "@mui/material";
+import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { ReactSession } from "react-client-session";
 
-export default function NewService() {
+export default function NewService(props) {
+  const providerid = ReactSession.get("userid");
+
   const [open, setOpen] = useState(false);
-  
-  const [serviceProviderUserName, setProvider] = useState("");
   const [serviceDescription, setDescription] = useState("");
-  const [serviceCategory, setCategory] = useState("");
+  const [serviceCategory, setCategory] = useState("Graphics & Design");
   const [price, setPrice] = useState("");
-  const [serviceID, setID] = useState(0);
+
+
+  const [serviceDescriptionReq, setDescriptionReq] = useState(true);
+ 
+  const [priceReq, setPriceReq] = useState(true);
   const history = useHistory();
+  
 
   const handleAdd = (e) => {
     e.preventDefault();
-    setID(serviceID + 1);
     const service = {
-      serviceProviderUserName,
+      providerid,
       serviceDescription,
       serviceCategory,
       price,
-      serviceID,
     };
-
-    if (
-      serviceProviderUserName === "" ||
-      serviceDescription === "" ||
-      serviceCategory === "" ||
-      price === ""
-    ) {
+    
+    if (!(serviceDescriptionReq || priceReq)) {
+      console.log("return")
       return;
     }
-    
-      fetch("http://localhost:8080/service/addNormalService", {
+    else {
+      fetch("http://localhost:8085/service/addNormalService", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(service),
       }).then(() => {
         console.log("new service added");
-        setProvider("")
-        setCategory("")
-        setCategory("")
-        setPrice("")
-        history.push("/");
+        setDescription("");
+        setCategory("Graphics & Design");
+        setPrice("");
+        window.location.reload();
         setOpen(false);
       });
+    }
+    
+      
   }
 
   const handleClickOpen = () => {
@@ -61,12 +63,21 @@ export default function NewService() {
   };
 
   const handleClose = () => {
-    setProvider("");
-    setCategory("");
-    setCategory("");
+    
+    setDescription("");
+    setCategory("Graphics & Design");
     setPrice("");
     setOpen(false);
   };
+
+  useEffect(() => {
+    if (serviceDescription === "") {
+      setDescriptionReq(false);
+    }
+    if (price === "") {
+      setPriceReq(false);
+    }
+  });
 
   return (
     <div>
@@ -99,38 +110,64 @@ export default function NewService() {
           <DialogContentText>Add your service data</DialogContentText>
 
           <TextField
-            required
-            fullWidth
-            margin="normal"
-            id="Provider"
-            label="Provider"
-            value={serviceProviderUserName}
-            onChange={(e) => setProvider(e.target.value)}
-          />
-          <TextField
+            error={!serviceDescriptionReq}
+            helperText={
+              serviceDescriptionReq ? "" : "This field cannot be empty."
+            }
             required
             margin="normal"
             id="ServiceDescription"
             label="ServiceDescription"
             value={serviceDescription}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              setDescription(e.target.value);
+              setDescriptionReq(true);
+            }}
           />
+          <Box sx={{ minWidth: 120, marginTop: 1 }}>
+            <FormControl fullWidth>
+              <InputLabel id="category-label">Category</InputLabel>
+              <Select
+                labelId="ServiceCategory"
+                id="ServiceCategory"
+                value={serviceCategory}
+                label="ServiceCategory"
+                onChange={(e) => setCategory(e.target.value)}
+              >
+                <MenuItem value={"Graphics & Design"}>
+                  {"Graphics & Design"}
+                </MenuItem>
+                <MenuItem value={"Digital Marketing"}>
+                  {"Digital Marketing"}
+                </MenuItem>
+                <MenuItem value={"Writing & Translation"}>
+                  {"Writing & Translation"}
+                </MenuItem>
+                <MenuItem value={"Video & Animation "}>
+                  {"Video & Animation "}
+                </MenuItem>
+                <MenuItem value={"Music & Audio"}>{"Music & Audio"}</MenuItem>
+                <MenuItem value={"Programming & Tech"}>
+                  {"Programming & Tech"}
+                </MenuItem>
+                <MenuItem value={"Business"}>{"Business"}</MenuItem>
+                <MenuItem value={"Lifestyle"}>{"Lifestyle"}</MenuItem>
+              </Select>
+            </FormControl>
+          </Box>
           <TextField
-            required
-            margin="normal"
-            id="ServiceCategory"
-            label="ServiceCategory"
-            value={serviceCategory}
-            onChange={(e) => setCategory(e.target.value)}
-          />
-          <TextField
+            error={!priceReq}
+            helperText={priceReq ? "" : "This field cannot be empty."}
             required
             margin="normal"
             id="price"
             label="price"
             type="number"
             value={price}
-            onChange={(e) => setPrice(e.target.value)}
+            onChange={(e) => {
+              setPrice(e.target.value);
+              setPriceReq(true);
+            }}
           />
         </DialogContent>
 

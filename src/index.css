@@ -13,5 +13,25 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+.photo {
+  height: 70px;
+  width: 70px;
+}
+ .font { 
+   font-family: "Copperplate", 
+Generic Font Family	Examples of Font Names
+Serif	Times New Roman
+Georgia
+Garamond
+Sans-serif	Arial
+Verdana
+Helvetica
+Monospace	Courier New
+Lucida Console
+Monaco
+Cursive	Brush Script MT
+Lucida Handwriting
+Fantasy;
+ }
 
 

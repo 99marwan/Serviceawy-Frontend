@@ -1,12 +1,36 @@
-import { Box, AppBar, Toolbar, IconButton, Typography, Button,  } from '@mui/material'
+import { Box, AppBar, Toolbar, IconButton, Typography, Button, Avatar, Container, Stack, Tooltip, Menu, MenuItem,  } from '@mui/material'
 import  MenuIcon  from '@mui/icons-material/Menu'
 import { Link } from 'react-router-dom';
+import { ReactSession } from "react-client-session";
+import { useState, useEffect } from "react";
 
 const ApplicationBar = () => {
+
+  
+  const [anchorElNav, setAnchorElNav] = useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+
+   const handleOpenNavMenu = (event) => {
+     setAnchorElNav(event.currentTarget);
+   };
+   const handleOpenUserMenu = (event) => {
+     setAnchorElUser(event.currentTarget);
+   };
+
+  const handleCloseNavMenu = () => {
+    setAnchorElNav(null);
+    localStorage.clear()
+    setAnchorElUser(null);
+    window.location.reload();
+  };
+
+   const handleCloseUserMenu = () => {
+     setAnchorElUser(null);
+   };
     return (
       <AppBar position="static" sx={{ background: "#535049" }}>
         <Toolbar>
-          <IconButton
+          {/*<IconButton
             size="large"
             edge="start"
             color="inherit"
@@ -14,17 +38,54 @@ const ApplicationBar = () => {
             sx={{ mr: 2 }}
           >
             <MenuIcon />
-          </IconButton>
+          </IconButton>*/}
           <Typography
-            variant="h6"
+            variant="h4"
             component="div"
-            sx={{ flexGrow: 1, fontFamily: "Exo 2" }}
+            sx={{ flexGrow: 1, color: "#bd814b" }}
           >
-            Fiver
+            Serviceawy
           </Typography>
-          <Link to={`/login`} style={{ textDecoration: "none" }}>
-            <Button sx={{ color: "#ffffff" }}>Login</Button>
-          </Link>
+          {ReactSession.get("username") == null && (
+            <Link to={`/login`} style={{ textDecoration: "none" }}>
+              <Button sx={{ color: "#ffffff" }}>Login</Button>
+            </Link>
+          )}
+          {ReactSession.get("username") != null && (
+            <h4> {ReactSession.get("username")} </h4>
+          )}
+          {ReactSession.get("username") != null && (
+            <Box sx={{ flexGrow: 0 }}>
+              <Tooltip title="Open settings">
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <Avatar
+                    alt={ReactSession.get("username")}
+                    src="/broken-image.jpg"
+                  />
+                </IconButton>
+              </Tooltip>
+              <Menu
+                sx={{ mt: "45px" }}
+                id="menu-appbar"
+                anchorEl={anchorElUser}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                keepMounted
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "right",
+                }}
+                open={Boolean(anchorElUser)}
+                onClose={handleCloseUserMenu}
+              >
+                <MenuItem onClick={handleCloseNavMenu}>
+                  <Typography textAlign="center">Logout</Typography>
+                </MenuItem>
+              </Menu>
+            </Box>
+          )}
         </Toolbar>
       </AppBar>
     );

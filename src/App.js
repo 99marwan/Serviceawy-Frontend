@@ -4,8 +4,12 @@ import ApplicationBar from './ApplicationBar';
 import { Slide } from '@mui/material';
 import Login from './Login';
 import Signup from './Signup';
+import { useState } from 'react';
+import { ReactSession } from "react-client-session";
 
 function App() {
+  ReactSession.setStoreType("localStorage");
+  //localStorage.clear();
   return (
     <Router>
       <div className="App">

@@ -1,11 +1,16 @@
 import { Button, Card, CardActions, CardContent, CardMedia, Container, Grid, Pagination, Typography } from "@mui/material";
 import NewService from "./NewService";
 import { Link } from "react-router-dom";
-
+import { useEffect, useState } from "react";
+import { ReactSession } from "react-client-session";
 
 const ServiceCards = (props) => {
     const services = props.services;
     const title = props.title;
+    const pageNum = props.pageNum;
+    
+    
+
   
     return (
       <div className="servcie-card">
@@ -14,7 +19,7 @@ const ServiceCards = (props) => {
           {/* End hero unit */}
           <Grid container spacing={2}>
             {services.map((service) => (
-              <Grid item key={service.serviceID} xs={6} sm={4} md={3}>
+              <Grid item key={service.serviceid} xs={6} sm={4} md={3}>
                 <Card
                   sx={{
                     height: "100%",
@@ -89,19 +94,7 @@ const ServiceCards = (props) => {
               </Grid>
             ))}
           </Grid>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "center",
-              paddingTop: 20,
-            }}
-          >
-            <Pagination
-              count={10}
-              color="secondary"
-              sx={{ color: "#ffffff" }}
-            />
-          </div>
+         
         </Container>
       </div>
     );

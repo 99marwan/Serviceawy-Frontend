@@ -1,5 +1,6 @@
 
 import {
+  Avatar,
   Button,
   Card,
   CardActionArea,
@@ -21,12 +22,13 @@ import {
   Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-
+import { useEffect, useState } from "react";
+import { useHistory } from "react-router-dom";
+import { ReactSession } from "react-client-session";
 
 const Signup = () => {
 
-  const [email, setEmail] = useState("");
+  const [emailAddress, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [DOB, setDOB] = useState("");
   const [password, setPassword] = useState("");
@@ -38,11 +40,14 @@ const Signup = () => {
   const [checkRegEmail, setCheckRegEmail] = useState(true);
   const [checkRegUsername, setCheckRegUsername] = useState(true);
   const [checkRegPassword, setCheckRegPassword] = useState(true);
+  const [alreadyExist, setAlreadyExist] = useState(true);
   const reg = /^([a-zA-Z0-9_\\.]+)@([a-zA-Z]+).([a-zA-Z_.]+)$/;
   const reg2 = /^([a-zA-Z0-9_.]+)$/;
   const reg3 = /^([a-zA-Z0-9_\\.-]+)$/;
+ 
+  const history = useHistory();
 
-  const account = { email, username, password };
+  const account = { emailAddress, username, password };
 
 
   const handleEmail = (e) => {
@@ -68,41 +73,67 @@ const Signup = () => {
   const handleDOB = (e) => {
     setDOB(e.target.value);
   };
-  const handleSignup = (e) => {
-    if (email === "") {
-      setRequiredField1(false);
-    }
-    if (!reg.test(email)) {
-      setCheckRegEmail(false);
-    }
-    if (username === "") {
-      setRequiredField2(false);
-    }
-     if (!reg3.test(username)) {
-       setCheckRegUsername(false);
-     }
-    if (password === "") {
-      setRequiredField3(false);
-    }
-    if (!reg3.test(password)) {
-      setCheckRegPassword(false);
-    }
-    if (confirmPassword === "") {
-      setRequiredField4(false);
-    }
-    if (requiredField1 || requiredField2 || requiredField3 || requiredField4) {
-      return;  
-    }
-    if (checkRegEmail || checkRegUsername || checkRegPassword) {
-      return;
-    }
-    if (password != confirmPassword) {
-      return;
-    }
-
-
-
+  const handleTest = (e) => {
+      if (emailAddress === "") {
+        setRequiredField1(false);
+      }
+      if (!reg.test(emailAddress)) {
+        setCheckRegEmail(false);
+      }
+      if (username === "") {
+        setRequiredField2(false);
+      }
+      if (!reg3.test(username)) {
+        setCheckRegUsername(false);
+      }
+      if (password === "") {
+        setRequiredField3(false);
+      }
+      if (!reg3.test(password) || password.length < 8) {
+        setCheckRegPassword(false);
+      }
+      if (confirmPassword === "") {
+        setRequiredField4(false);
+      }
   };
+  const handleSignup = (e) => {  
+    if (!(requiredField1 || requiredField2 || requiredField3 || requiredField4)) {
+      console.log("if1");
+    }
+    else if (!(checkRegEmail || checkRegUsername || checkRegPassword)) {
+      console.log("if2");
+    }
+    else if (password != confirmPassword) {
+      console.log("if3");
+    }
+    else {
+      console.log("here");
+      fetch("http://localhost:8085/user/signUp", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(account),
+      })
+        .then((res) => {
+          console.log("new account added");
+          return res.json();
+        })
+        .then((data) => {
+          console.log(data);
+          ReactSession.set("username", data.username);
+          ReactSession.set("userid", data.userid);
+          ReactSession.set("type", "User");
+          history.push("/");
+        })
+        .catch((err) => {
+          console.log(err);
+          setAlreadyExist(false);
+        });
+    } 
+  };
+
+  useEffect(() => {
+    handleTest();
+  })
 
 
   return (
@@ -123,12 +154,6 @@ const Signup = () => {
               justifyContent: "center",
             }}
           >
-            <CardMedia
-              component="img"
-              height={150}
-              image="https://picsum.photos/400/300"
-              alt="random"
-            />
             <CardContent
               sx={{
                 flexGrow: 1,
@@ -138,13 +163,17 @@ const Signup = () => {
                 alignItems: "center",
               }}
             >
+              <Avatar
+                alt="logo"
+                src={require("./serviceawy2.png")}
+                sx={{ width: 150, height: 150 }}
+              />
               <TextField
-                error={!requiredField1 || !checkRegEmail}
+                error={!requiredField1 || !checkRegEmail || !alreadyExist}
                 helperText={
                   (requiredField1 ? "" : "This field cannot be empty.") ||
-                  (checkRegEmail
-                    ? ""
-                    : "Email is not correct")
+                  (checkRegEmail ? "" : "Email is not correct") ||
+                  (alreadyExist ? "" : "Already exists.")
                 }
                 required
                 fullWidth
@@ -152,11 +181,11 @@ const Signup = () => {
                 id="E-mail"
                 label="E-mail"
                 variant="outlined"
-                value={email}
+                value={emailAddress}
                 onChange={handleEmail}
               />
               <TextField
-                error={!requiredField2 || !checkRegUsername}
+                error={!requiredField2 || !checkRegUsername || !alreadyExist}
                 required
                 fullWidth
                 margin="normal"
@@ -169,7 +198,8 @@ const Signup = () => {
                   (requiredField2 ? "" : "This field cannot be empty.") ||
                   (checkRegUsername
                     ? ""
-                    : "Username must include onle letters, numbers, ., _, -")
+                    : "Username must include only letters, numbers, ., _, -") ||
+                  (alreadyExist ? "" : "Already exists.")
                 }
               />
               <TextField
@@ -178,7 +208,7 @@ const Signup = () => {
                   (requiredField3 ? "" : "This field cannot be empty.") ||
                   (checkRegPassword
                     ? ""
-                    : "Password must include onle letters, numbers, ., _, -")
+                    : "Password must be more than 8 chars, include only letters, numbers, ., _, -")
                 }
                 required
                 fullWidth
@@ -209,8 +239,8 @@ const Signup = () => {
                 variant="contained"
                 sx={{
                   marginTop: 5,
-                  background: "#c3195d",
-                  backgroundColor: "#c3195d",
+                  background: "#bd814b",
+                  backgroundColor: "#bd814b",
                 }}
               >
                 Signup

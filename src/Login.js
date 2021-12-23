@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Card,
   CardActionArea,
@@ -23,28 +24,76 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { ReactSession } from "react-client-session";
+import { useHistory } from "react-router-dom";
 
-const Login = () => {
+const Login = (props) => {
   const [accountType, setAccountType] = useState("User");
-  const [email, setEmail] = useState("");
+  const [userName, setuserName] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [notExist, setNotExist] = useState(true);
+  const history = useHistory();
+  
 
   const handleChange = (e) => {
-    setAccountType(e.target.value)};
-const handleEmail = (e) => {
-  setEmail(e.target.value)
-}
+    setAccountType(e.target.value)
+  };
+  
+  const handleuserName = (e) => {
+    setuserName(e.target.value)
+  }
     const handlePassword = (e) => {
       setPassword(e.target.value);
     };
     const handleClickShowPassword = () => {
       setShowPassword(!showPassword);
     };
+  const handleLogin = (e) => {
+    if (userName != "" && password != "") {
+      console.log(accountType);
+      if (accountType == "User") {
+        fetch(`http://localhost:8085/user/signIn/${userName}/${password}`)
+          .then((res) => {
+            
+            return res.json();
+          })
+          .then((data) => {
+            console.log(data);
+
+            ReactSession.set("username", data.username);
+            ReactSession.set("userid", data.userid);
+            ReactSession.set("type", "User");
+
+            history.push("/");
+          })
+          .catch((err) => {
+            console.log(err);
+            setNotExist(false)
+          });
+      } else {
+        fetch(`http://localhost:8085/manager/signIn/${userName}/${password}`)
+          .then((res) => {
+            return res.json();
+          })
+          .then((data) => {
+            console.log(data);
+            ReactSession.set("username", data.username);
+            ReactSession.set("userid", data.userid);
+            ReactSession.set("type", "Manager");
+
+            history.push("/");
+          })
+          .catch((err) => {
+            console.log(err);
+            setNotExist(false);
+          });
+      }
+    }
+  }
 
     return (
       <div className="Login">
-        <h1> {password}  </h1>
         <Container
           component="main"
           maxWidth="xs"
@@ -61,12 +110,6 @@ const handleEmail = (e) => {
                 justifyContent: "center",
               }}
             >
-              <CardMedia
-                component="img"
-                height={150}
-                image="https://picsum.photos/400/300"
-                alt="random"
-              />
               <CardContent
                 sx={{
                   flexGrow: 1,
@@ -76,21 +119,30 @@ const handleEmail = (e) => {
                   alignItems: "center",
                 }}
               >
+                <Avatar
+                  alt="logo"
+                  src={require("./serviceawy2.png")}
+                  sx={{ width: 150, height: 150 }}
+                />
                 <TextField
+                  error={userName === "" || !notExist}
+                  helperText={(userName === "" ? "required" : "") || (notExist ? "" : "Email or password are incorrect")}
                   required
                   fullWidth
                   margin="normal"
                   id="E-mail"
-                  label="E-mail"
+                  label="username"
                   variant="outlined"
-                  value={email}
-                  onChange={handleEmail}
+                  value={userName}
+                  onChange={handleuserName}
                 />
                 <FormControl sx={{ m: 1 }} fullWidth variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">
                     Password
                   </InputLabel>
                   <OutlinedInput
+                    error={password === "" || !notExist}
+                    required
                     id="outlined-adornment-password"
                     type={showPassword ? "text" : "password"}
                     value={password}
@@ -103,11 +155,7 @@ const handleEmail = (e) => {
                           //onMouseDown={handleMouseDownPassword}
                           edge="end"
                         >
-                          {showPassword ? (
-                            <VisibilityOff />
-                          ) : (
-                            <Visibility />
-                          )}
+                          {showPassword ? <VisibilityOff /> : <Visibility />}
                         </IconButton>
                       </InputAdornment>
                     }
@@ -135,7 +183,7 @@ const handleEmail = (e) => {
                         <Radio
                           sx={{
                             "&.Mui-checked": {
-                              color: "#c3195d",
+                              color: "#bd814b",
                             },
                           }}
                         />
@@ -148,7 +196,7 @@ const handleEmail = (e) => {
                         <Radio
                           sx={{
                             "&.Mui-checked": {
-                              color: "#c3195d",
+                              color: "#bd814b",
                             },
                           }}
                         />
@@ -163,8 +211,9 @@ const handleEmail = (e) => {
                   sx={{
                     marginTop: 5,
                     background: "#c3195d",
-                    backgroundColor: "#c3195d",
+                    backgroundColor: "#bd814b",
                   }}
+                  onClick={handleLogin}
                 >
                   Login
                 </Button>
