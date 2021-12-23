@@ -35,25 +35,31 @@ const Signup = () => {
   const [requiredField2, setRequiredField2] = useState(true);
   const [requiredField3, setRequiredField3] = useState(true);
   const [requiredField4, setRequiredField4] = useState(true);
+  const [checkRegEmail, setCheckRegEmail] = useState(true);
+  const [checkRegUsername, setCheckRegUsername] = useState(true);
+  const [checkRegPassword, setCheckRegPassword] = useState(true);
   const reg = /^([a-zA-Z0-9_\\.]+)@([a-zA-Z]+).([a-zA-Z_.]+)$/;
   const reg2 = /^([a-zA-Z0-9_.]+)$/;
   const reg3 = /^([a-zA-Z0-9_\\.-]+)$/;
 
+  const account = { email, username, password };
+
 
   const handleEmail = (e) => {
     setEmail(e.target.value);
-    if (email === "")
-      setRequiredField1(false);
-    else
-      setRequiredField1(true);
+    setRequiredField1(true);
+    setCheckRegEmail(true);
   };
   const handleUsername = (e) => {
     setUsername(e.target.value);
     setRequiredField2(true);
+    setCheckRegUsername(true);
   };
   const handlePassword = (e) => {
     setPassword(e.target.value);
     setRequiredField3(true);
+    setRequiredField4(true);
+    setCheckRegPassword(true);
   };
   const handleConfirmPassword = (e) => {
     setConfirmPassword(e.target.value);
@@ -66,22 +72,41 @@ const Signup = () => {
     if (email === "") {
       setRequiredField1(false);
     }
+    if (!reg.test(email)) {
+      setCheckRegEmail(false);
+    }
     if (username === "") {
       setRequiredField2(false);
     }
+     if (!reg3.test(username)) {
+       setCheckRegUsername(false);
+     }
     if (password === "") {
       setRequiredField3(false);
+    }
+    if (!reg3.test(password)) {
+      setCheckRegPassword(false);
     }
     if (confirmPassword === "") {
       setRequiredField4(false);
     }
+    if (requiredField1 || requiredField2 || requiredField3 || requiredField4) {
+      return;  
+    }
+    if (checkRegEmail || checkRegUsername || checkRegPassword) {
+      return;
+    }
+    if (password != confirmPassword) {
+      return;
+    }
+
+
+
   };
 
 
   return (
     <div className="Signup">
-      <h1>  {console.log(reg2.test(username))} </h1>
-      <h1> {username} </h1>
       <Container
         component="main"
         maxWidth="xs"
@@ -114,8 +139,13 @@ const Signup = () => {
               }}
             >
               <TextField
-                error={!requiredField1 || !reg.test(email)}
-                helperText={ requiredField1 ? "" : "This field cannot be empty."}
+                error={!requiredField1 || !checkRegEmail}
+                helperText={
+                  (requiredField1 ? "" : "This field cannot be empty.") ||
+                  (checkRegEmail
+                    ? ""
+                    : "Email is not correct")
+                }
                 required
                 fullWidth
                 margin="normal"
@@ -126,7 +156,7 @@ const Signup = () => {
                 onChange={handleEmail}
               />
               <TextField
-                error={!requiredField2}
+                error={!requiredField2 || !checkRegUsername}
                 required
                 fullWidth
                 margin="normal"
@@ -135,34 +165,47 @@ const Signup = () => {
                 variant="outlined"
                 value={username}
                 onChange={handleUsername}
-                helperText={requiredField2 ? "" : "This field cannot be empty."}
+                helperText={
+                  (requiredField2 ? "" : "This field cannot be empty.") ||
+                  (checkRegUsername
+                    ? ""
+                    : "Username must include onle letters, numbers, ., _, -")
+                }
               />
               <TextField
-                error={!requiredField3}
-                helperText={requiredField3 ? "" : "This field cannot be empty."}
+                error={!requiredField3 || !checkRegPassword}
+                helperText={
+                  (requiredField3 ? "" : "This field cannot be empty.") ||
+                  (checkRegPassword
+                    ? ""
+                    : "Password must include onle letters, numbers, ., _, -")
+                }
                 required
                 fullWidth
                 margin="normal"
                 id="password"
-                label="password"
+                label="Password"
                 variant="outlined"
                 value={password}
                 onChange={handlePassword}
               />
               <TextField
-                error={!requiredField4}
-                helperText={requiredField4 ? "" : "This field cannot be empty."}
+                error={!requiredField4 || password != confirmPassword}
+                helperText={
+                  (requiredField4 ? "" : "This field cannot be empty.") ||
+                  (password === confirmPassword ? "" : "passords do not match")
+                }
                 required
                 fullWidth
                 margin="normal"
                 id="confirm password"
-                label="confirm password"
+                label="Confirm Password"
                 variant="outlined"
                 value={confirmPassword}
                 onChange={handleConfirmPassword}
               />
-
-              <Button onClick={handleSignup}
+              <Button
+                onClick={handleSignup}
                 variant="contained"
                 sx={{
                   marginTop: 5,

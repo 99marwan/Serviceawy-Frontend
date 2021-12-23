@@ -42,10 +42,6 @@ const handleEmail = (e) => {
       setShowPassword(!showPassword);
     };
 
-    
-
-
-
     return (
       <div className="Login">
         <h1> {password}  </h1>
