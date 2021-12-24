@@ -40,7 +40,8 @@ const Signup = () => {
   const [checkRegEmail, setCheckRegEmail] = useState(true);
   const [checkRegUsername, setCheckRegUsername] = useState(true);
   const [checkRegPassword, setCheckRegPassword] = useState(true);
-  const [alreadyExist, setAlreadyExist] = useState(true);
+  const [emailAlreadyExist, setEmailAlreadyExist] = useState(true);
+  const [usernameAlreadyExist, setUsernameAlreadyExist] = useState(true);
   const reg = /^([a-zA-Z0-9_\\.]+)@([a-zA-Z]+).([a-zA-Z_.]+)$/;
   const reg2 = /^([a-zA-Z0-9_.]+)$/;
   const reg3 = /^([a-zA-Z0-9_\\.-]+)$/;
@@ -54,11 +55,13 @@ const Signup = () => {
     setEmail(e.target.value);
     setRequiredField1(true);
     setCheckRegEmail(true);
+    setEmailAlreadyExist(true);
   };
   const handleUsername = (e) => {
     setUsername(e.target.value);
     setRequiredField2(true);
     setCheckRegUsername(true);
+    setUsernameAlreadyExist(true);
   };
   const handlePassword = (e) => {
     setPassword(e.target.value);
@@ -97,10 +100,10 @@ const Signup = () => {
       }
   };
   const handleSignup = (e) => {  
-    if (!(requiredField1 || requiredField2 || requiredField3 || requiredField4)) {
+    if (!(requiredField1 && requiredField2 && requiredField3 && requiredField4)) {
       console.log("if1");
     }
-    else if (!(checkRegEmail || checkRegUsername || checkRegPassword)) {
+    else if (!(checkRegEmail && checkRegUsername && checkRegPassword)) {
       console.log("if2");
     }
     else if (password != confirmPassword) {
@@ -114,19 +117,35 @@ const Signup = () => {
         body: JSON.stringify(account),
       })
         .then((res) => {
-          console.log("new account added");
           return res.json();
         })
         .then((data) => {
           console.log(data);
-          ReactSession.set("username", data.username);
-          ReactSession.set("userid", data.userid);
-          ReactSession.set("type", "User");
-          history.push("/");
+          if (data === "Email Address Already Exists") {
+            setEmailAlreadyExist(false);
+            if (data === "Username Already Exists") {
+              setUsernameAlreadyExist(false);
+            }
+          }
+          else if (data === "Username Already Exists") {
+            setUsernameAlreadyExist(false);
+            if (data === "Email Address Already Exists") {
+              setEmailAlreadyExist(false);
+            }
+          }
+          
+          else {
+            console.log("new user added")
+            ReactSession.set("username", data.username);
+            ReactSession.set("userid", data.userid);
+            ReactSession.set("type", "User");
+            history.push("/");
+          }
+          
         })
         .catch((err) => {
           console.log(err);
-          setAlreadyExist(false);
+          setEmailAlreadyExist(false);
         });
     } 
   };
@@ -169,11 +188,11 @@ const Signup = () => {
                 sx={{ width: 150, height: 150 }}
               />
               <TextField
-                error={!requiredField1 || !checkRegEmail || !alreadyExist}
+                error={!requiredField1 || !checkRegEmail || !emailAlreadyExist}
                 helperText={
                   (requiredField1 ? "" : "This field cannot be empty.") ||
                   (checkRegEmail ? "" : "Email is not correct") ||
-                  (alreadyExist ? "" : "Already exists.")
+                  (emailAlreadyExist ? "" : "Email Already exists.")
                 }
                 required
                 fullWidth
@@ -183,9 +202,12 @@ const Signup = () => {
                 variant="outlined"
                 value={emailAddress}
                 onChange={handleEmail}
+                autoComplete="off"
               />
               <TextField
-                error={!requiredField2 || !checkRegUsername || !alreadyExist}
+                error={
+                  !requiredField2 || !checkRegUsername || !usernameAlreadyExist
+                }
                 required
                 fullWidth
                 margin="normal"
@@ -194,12 +216,13 @@ const Signup = () => {
                 variant="outlined"
                 value={username}
                 onChange={handleUsername}
+                autoComplete="off"
                 helperText={
                   (requiredField2 ? "" : "This field cannot be empty.") ||
                   (checkRegUsername
                     ? ""
                     : "Username must include only letters, numbers, ., _, -") ||
-                  (alreadyExist ? "" : "Already exists.")
+                  (usernameAlreadyExist ? "" : "Username Already exists.")
                 }
               />
               <TextField
@@ -218,6 +241,7 @@ const Signup = () => {
                 variant="outlined"
                 value={password}
                 onChange={handlePassword}
+                autoComplete="off"
               />
               <TextField
                 error={!requiredField4 || password != confirmPassword}
@@ -233,6 +257,7 @@ const Signup = () => {
                 variant="outlined"
                 value={confirmPassword}
                 onChange={handleConfirmPassword}
+                autoComplete="off"
               />
               <Button
                 onClick={handleSignup}

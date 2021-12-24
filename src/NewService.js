@@ -117,6 +117,7 @@ export default function NewService(props) {
               setDescription(e.target.value);
               setDescriptionReq(true);
             }}
+            autoComplete="off"
           />
           <Box sx={{ minWidth: 120, marginTop: 1 }}>
             <FormControl fullWidth>
@@ -162,6 +163,7 @@ export default function NewService(props) {
               setPrice(e.target.value);
               setPriceReq(true);
             }}
+            autoComplete="off"
           />
         </DialogContent>
 

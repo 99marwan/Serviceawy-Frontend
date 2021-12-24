@@ -33,6 +33,7 @@ const Login = (props) => {
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [notExist, setNotExist] = useState(true);
+  const [incorrectPassword, setIncorrectPassword] = useState(true);
   const history = useHistory();
   
 
@@ -42,9 +43,11 @@ const Login = (props) => {
   
   const handleuserName = (e) => {
     setuserName(e.target.value)
+    setNotExist(true);
   }
     const handlePassword = (e) => {
       setPassword(e.target.value);
+      setIncorrectPassword(true);
     };
     const handleClickShowPassword = () => {
       setShowPassword(!showPassword);
@@ -60,34 +63,49 @@ const Login = (props) => {
           })
           .then((data) => {
             console.log(data);
-
-            ReactSession.set("username", data.username);
-            ReactSession.set("userid", data.userid);
-            ReactSession.set("type", "User");
-
-            history.push("/");
+            if (data === "Username Does Not Exist") {
+              setNotExist(false)
+            }
+            else if (data === "Incorrect Password") {
+              setIncorrectPassword(false);
+            }
+            else {
+              ReactSession.set("username", data.username);
+              ReactSession.set("userid", data.userid);
+              ReactSession.set("type", "User");
+              history.push("/");
+            }
           })
           .catch((err) => {
             console.log(err);
             setNotExist(false)
           });
       } else {
-        fetch(`http://localhost:8085/manager/signIn/${userName}/${password}`)
-          .then((res) => {
-            return res.json();
-          })
-          .then((data) => {
-            console.log(data);
-            ReactSession.set("username", data.username);
-            ReactSession.set("userid", data.userid);
-            ReactSession.set("type", "Manager");
-
-            history.push("/");
-          })
-          .catch((err) => {
-            console.log(err);
-            setNotExist(false);
-          });
+        if (userName != "" && password != "") {
+          fetch(`http://localhost:8085/manager/signIn/${userName}/${password}`)
+            .then((res) => {
+              return res.json();
+            })
+            .then((data) => {
+              console.log(data);
+              if (data === "Username Does Not Exist") {
+                setNotExist(false)
+              }
+              else if (data === "Incorrect Password") {
+                setIncorrectPassword(false);
+              }
+              else {
+                ReactSession.set("username", data.username);
+                ReactSession.set("userid", data.userid);
+                ReactSession.set("type", "Manager");
+                history.push("/");
+              }
+            })
+            .catch((err) => {
+              console.log(err);
+              setNotExist(false);
+            });
+        }
       }
     }
   }
@@ -126,7 +144,7 @@ const Login = (props) => {
                 />
                 <TextField
                   error={userName === "" || !notExist}
-                  helperText={(userName === "" ? "required" : "") || (notExist ? "" : "Email or password are incorrect")}
+                  helperText={(userName === "" ? "required" : "") || (notExist ? "" : "username is incorrect")}
                   required
                   fullWidth
                   margin="normal"
@@ -135,13 +153,14 @@ const Login = (props) => {
                   variant="outlined"
                   value={userName}
                   onChange={handleuserName}
+                  autoComplete="off"
                 />
                 <FormControl sx={{ m: 1 }} fullWidth variant="outlined">
                   <InputLabel htmlFor="outlined-adornment-password">
                     Password
                   </InputLabel>
                   <OutlinedInput
-                    error={password === "" || !notExist}
+                    error={password === "" || !incorrectPassword}
                     required
                     id="outlined-adornment-password"
                     type={showPassword ? "text" : "password"}
