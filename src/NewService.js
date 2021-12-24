@@ -36,11 +36,7 @@ export default function NewService(props) {
       price,
     };
     
-    if (!(serviceDescriptionReq || priceReq)) {
-      console.log("return")
-      return;
-    }
-    else {
+    if (serviceDescription != "" && price != "") {
       fetch("http://localhost:8085/service/addNormalService", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -53,9 +49,7 @@ export default function NewService(props) {
         window.location.reload();
         setOpen(false);
       });
-    }
-    
-      
+    }    
   }
 
   const handleClickOpen = () => {
