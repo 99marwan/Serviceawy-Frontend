@@ -9,7 +9,6 @@ import { ReactSession } from "react-client-session";
 
 function App() {
   ReactSession.setStoreType("localStorage");
-  //localStorage.clear();
   return (
     <Router>
       <div className="App">
