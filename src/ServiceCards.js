@@ -19,12 +19,17 @@ const ServiceCards = (props) => {
   
     return (
       <div className="servcie-card">
+       
         <Container sx={{ py: 2, maxHeight: "100%" }}>
           <h2 style={{ color: "#678983" }}>{title}</h2>
           {/* End hero unit */}
           <Grid container spacing={2}>
             {services.map((service) => (
               <Grid item key={service.serviceid} xs={6} sm={4} md={4}>
+                 <Link
+                    to={`/services/${service.serviceid}`}
+                    style={{ textDecoration: "none" }}
+                  >
                 <Card
                   sx={{
                     height: "100%",
@@ -62,12 +67,6 @@ const ServiceCards = (props) => {
                       {service.serviceDescription}
                     </Typography>
                   </CardContent>
-                  {/*<Link
-                      to={`/services/${service.id}`}
-                      style={{ textDecoration: "none" }}
-                    >
-                      <Button size="small">View</Button>
-                    </Link>*/}
 
                   <hr
                     style={{
@@ -124,10 +123,12 @@ const ServiceCards = (props) => {
                     </CardActions>
                   )}
                 </Card>
+                </Link>
               </Grid>
             ))}
           </Grid>
         </Container>
+        
       </div>
     );
 }
