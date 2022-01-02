@@ -6,6 +6,7 @@ import Login from './Login';
 import Signup from './Signup';
 import { useState } from 'react';
 import { ReactSession } from "react-client-session";
+import ServiceDetails from './ServiceDetails';
 
 function App() {
   ReactSession.setStoreType("localStorage");
@@ -22,6 +23,9 @@ function App() {
           </Route>
           <Route exact path="/Signup">
             <Signup />
+          </Route>
+          <Route path="/services/:serviceid">
+            <ServiceDetails />
           </Route>
         </Switch>
       </div>
