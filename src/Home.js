@@ -9,36 +9,45 @@ const Home = () => {
 
   const [pageNum, setPageNum] = useState(0);
   const [currentPage, setPage] = useState(1);
+
   
   const handleChange = (event, value) => {
-    setPage(value);
+    setPage(value)
   };
  
-   fetch(`http://localhost:8085/service/getPagesNum/${ReactSession.get("type")==="Manager" ? "false" : "true"}`)
-     .then((res) => {
-       return res.json();
-     })
-     .then((data) => {
-       console.log(data);
-       setPageNum(data);
-     })
-     .catch((err) => {
-       console.log(err);
-     });
-    
+  fetch(
+    `http://localhost:8085/service/getPagesNum/${
+      ReactSession.get("type") === "Manager" ? "false" : "true"
+    }`
+  )
+    .then((res) => {
+      return res.json();
+    })
+    .then((data) => {
+      console.log(data);
+      setPageNum(data);
+    })
+    .catch((err) => {
+      console.log(err);
+    });
+
     
 
-const {
-  data: services,
-  isPending,
-  error,
-} = useFetch(
-  `http://localhost:8085/service/loadServices/${currentPage}/${"random"}/${ReactSession.get("type")==="Manager" ? "false" : "true"}`
-);
     
+  const {
+    data: services,
+    isPending,
+    error,
+  } = useFetch(
+    `http://localhost:8085/service/loadServices/${currentPage}/${"random"}/${
+      ReactSession.get("type") === "Manager" ? "false" : "true"
+    }`,currentPage
+  );
+  
 
     return (
       <div className="home">
+       
         {/*error && <div>{error}</div>*/}
         {isPending && <div>Loading....</div>}
         {/*as blogs it null until fetch finished
@@ -52,6 +61,7 @@ const {
             services={services}
             title="All Services!"
             pageNum={pageNum}
+            tab={6}
           />
         )}
         <div

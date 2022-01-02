@@ -1,4 +1,13 @@
-import { Avatar, Box, Button, Card, Container, Grid, Tab, Tabs } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  Container,
+  Grid,
+  Tab,
+  Tabs,
+} from "@mui/material";
 import DryCleaningOutlinedIcon from "@mui/icons-material/DryCleaningOutlined";
 import DryCleaningIcon from "@mui/icons-material/DryCleaning";
 import CheckCircleOutlineOutlinedIcon from "@mui/icons-material/CheckCircleOutlineOutlined";
@@ -10,18 +19,26 @@ import ServiceCards from "./ServiceCards";
 import useFetch from "./useFetch";
 
 const AccountPage = () => {
+  const [value, setValue] = useState(0);
+  const [url, setUrl] = useState(
+    `http://localhost:8085/user/loadServices/${ReactSession.get("username")}`
+  );
 
-    const [value, setValue] = useState(0);
+  const handleChange = (event, newValue) => {
+    console.log(newValue);
+    setValue(newValue);
+    if (newValue === 0) {
+      setUrl(
+        `http://localhost:8085/user/loadServices/${ReactSession.get(
+          "username"
+        )}`
+      );
+    } else {
+      setUrl(`http://localhost:8085/user/loadServices/testuser2`);
+    }
+  };
 
-    const handleChange = (event, newValue) => {
-      setValue(newValue);
-    };
-
-  const {
-    data: services,
-    isPending,
-    error,
-  } = useFetch(`http://localhost:8085/service/loadServices/${1}/${"random"}`);
+  const { data: services, isPending, error } = useFetch(url, 1, value);
 
   return (
     <div className="account-page">
@@ -62,7 +79,6 @@ const AccountPage = () => {
                 aria-label="icon label tabs example"
                 indicatorColor="secondary"
                 textColor="inherit"
-                
                 sx={{ background: "1A5F7A" }}
               >
                 <Tab icon={<AssignmentIndIcon />} label="My Services" />
@@ -83,6 +99,7 @@ const AccountPage = () => {
                 services={services}
                 title="All Services!"
                 pageNum={1}
+                tab={value}
               />
             )}
           </Card>
