@@ -45,7 +45,8 @@ const {
          *and in js check left side first
          */}
 
-        {ReactSession.get("username") && <NewService />}
+        {ReactSession.get("username") &&
+          ReactSession.get("type") === "User" && <NewService />}
         {services && (
           <ServiceCards
             services={services}

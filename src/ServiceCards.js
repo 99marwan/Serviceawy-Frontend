@@ -1,16 +1,21 @@
-import { Button, Card, CardActions, CardContent, CardMedia, Container, Grid, Pagination, Typography } from "@mui/material";
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, Container, Grid, IconButton, Pagination, Stack, Typography } from "@mui/material";
 import NewService from "./NewService";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { ReactSession } from "react-client-session";
+import MoreVertIcon from "@mui/icons-material/MoreVert";
 
 const ServiceCards = (props) => {
     const services = props.services;
     const title = props.title;
     const pageNum = props.pageNum;
     
-    
-
+    const handleAccept = () => {
+       return
+    }
+    const handleDecline = () => {
+      return;
+    };
   
     return (
       <div className="servcie-card">
@@ -19,7 +24,7 @@ const ServiceCards = (props) => {
           {/* End hero unit */}
           <Grid container spacing={2}>
             {services.map((service) => (
-              <Grid item key={service.serviceid} xs={6} sm={4} md={3}>
+              <Grid item key={service.serviceid} xs={6} sm={4} md={4}>
                 <Card
                   sx={{
                     height: "100%",
@@ -29,9 +34,18 @@ const ServiceCards = (props) => {
                     color: "#535049",
                   }}
                 >
+                  <CardHeader
+                    avatar={
+                      <Avatar
+                        sx={{ width: 24, height: 24 }}
+                        aria-label="recipe"
+                      ></Avatar>
+                    }
+                    title="Username"
+                  />
                   <CardMedia
                     component="img"
-                    height={150}
+                    height={180}
                     image="https://picsum.photos/400/300"
                     alt="random"
                   />
@@ -43,7 +57,7 @@ const ServiceCards = (props) => {
                       gutterBottom
                       variant="subtitle2"
                       component="div"
-                      sx={{ fontWeight: "bold" }}
+                      sx={{ fontSize: 16 }}
                     >
                       {service.serviceDescription}
                     </Typography>
@@ -57,9 +71,6 @@ const ServiceCards = (props) => {
 
                   <hr
                     style={{
-                      color: "#535049",
-                      backgroundColor: "#535049",
-                      borderColor: "#535049",
                       width: "100%",
                     }}
                   />
@@ -74,7 +85,7 @@ const ServiceCards = (props) => {
                       gutterBottom
                       variant="subtitle2"
                       component="div"
-                      sx={{ fontWeight: "bold" }}
+                      sx={{ fontFamily: "Monospace", fontSize: 16 }}
                     >
                       {service.serviceCategory}
                     </Typography>
@@ -85,16 +96,37 @@ const ServiceCards = (props) => {
                       component="div"
                       sx={{
                         fontWeight: "bold",
+                        fontFamily: "Monospace",
+                        fontSize: 16,
                       }}
                     >
                       {service.price + "$"}
                     </Typography>
                   </Container>
+                  {ReactSession.get("type") === "Manager" && (
+                    <CardActions
+                      sx={{ display: "flex", justifyContent: "space-between" }}
+                    >
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={handleDecline}
+                      >
+                        Decline
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="success"
+                        onClick={handleAccept}
+                      >
+                        Accept
+                      </Button>
+                    </CardActions>
+                  )}
                 </Card>
               </Grid>
             ))}
           </Grid>
-         
         </Container>
       </div>
     );

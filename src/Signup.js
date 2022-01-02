@@ -45,7 +45,7 @@ const Signup = () => {
   const reg = /^([a-zA-Z0-9_\\.]+)@([a-zA-Z]+).([a-zA-Z_.]+)$/;
   const reg2 = /^([a-zA-Z0-9_.]+)$/;
   const reg3 = /^([a-zA-Z0-9_\\.-]+)$/;
- 
+  
   const history = useHistory();
 
   const account = { emailAddress, username, password };

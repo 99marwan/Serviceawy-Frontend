@@ -80,6 +80,14 @@ const ApplicationBar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
+                <Link
+                  to={`/${ReactSession.get("username")}`}
+                  style={{ textDecoration: "none"}}
+                > <MenuItem>
+                    <Typography textAlign="center">Account</Typography>
+                  </MenuItem>
+                </Link>
+
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">Logout</Typography>
                 </MenuItem>
