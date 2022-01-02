@@ -39,12 +39,15 @@ const ApplicationBar = () => {
           >
             <MenuIcon />
           </IconButton>*/}
+
           <Typography
             variant="h4"
             component="div"
             sx={{ flexGrow: 1, color: "#bd814b" }}
           >
-            Serviceawy
+            <Link to={`/`} style={{ textDecoration: "none", color: "#bd814b" }}>
+              Serviceawy
+            </Link>
           </Typography>
           {ReactSession.get("username") == null && (
             <Link to={`/login`} style={{ textDecoration: "none" }}>
@@ -61,6 +64,7 @@ const ApplicationBar = () => {
                   <Avatar
                     alt={ReactSession.get("username")}
                     src="/broken-image.jpg"
+                    sx={{ marginLeft: 2 }}
                   />
                 </IconButton>
               </Tooltip>
@@ -82,9 +86,11 @@ const ApplicationBar = () => {
               >
                 <Link
                   to={`/${ReactSession.get("username")}`}
-                  style={{ textDecoration: "none"}}
-                > <MenuItem>
-                    <Typography textAlign="center">Account</Typography>
+                  style={{ textDecoration: "none" }}
+                >
+                  {" "}
+                  <MenuItem>
+                    <Typography textAlign="center">Profile</Typography>
                   </MenuItem>
                 </Link>
 

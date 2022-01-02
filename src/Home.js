@@ -14,7 +14,7 @@ const Home = () => {
     setPage(value);
   };
  
-   fetch(`http://localhost:8085/service/getPagesNum`)
+   fetch(`http://localhost:8085/service/getPagesNum/${ReactSession.get("type")==="Manager" ? "false" : "true"}`)
      .then((res) => {
        return res.json();
      })
@@ -33,7 +33,7 @@ const {
   isPending,
   error,
 } = useFetch(
-  `http://localhost:8085/service/loadServices/${currentPage}/${"random"}`
+  `http://localhost:8085/service/loadServices/${currentPage}/${"random"}/${ReactSession.get("type")==="Manager" ? "false" : "true"}`
 );
     
 
