@@ -8,8 +8,8 @@ import MoreVertIcon from "@mui/icons-material/MoreVert";
 const ServiceCards = (props) => {
     const services = props.services;
     const title = props.title;
-  const pageNum = props.pageNum;
-  const tab = props.tab;
+    const pageNum = props.pageNum;
+    const tab = props.tab;
     
   const handleAccept = (service) => {
     console.log(service);
@@ -37,12 +37,19 @@ const ServiceCards = (props) => {
   
     return (
       <div className="servcie-card">
+        {console.log(tab)}
         <Container sx={{ py: 2, maxHeight: "100%" }}>
           <h2 style={{ color: "#678983" }}>{title}</h2>
           {/* End hero unit */}
           <Grid container spacing={2}>
             {services.map((service) => (
-              <Grid item key={service.serviceid} xs={6} sm={4} md={4}>
+              <Grid
+                item
+                key={tab > 0 ? service.transactionid : service.serviceid}
+                xs={6}
+                sm={4}
+                md={4}
+              >
                 <Card
                   sx={{
                     height: "100%",
@@ -56,7 +63,8 @@ const ServiceCards = (props) => {
                     to={`/services/${service.serviceid}`}
                     style={{ textDecoration: "none", color: "#535049" }}
                   >
-                    {tab != 0 && tab != 1 && tab != 2 && (
+                    {ReactSession.set("service", service)}
+                    {tab != 0 && (
                       <CardHeader
                         avatar={
                           <Avatar
@@ -64,7 +72,9 @@ const ServiceCards = (props) => {
                             aria-label="recipe"
                           ></Avatar>
                         }
-                        title={service.providername}
+                        title={
+                           service.providername
+                        }
                       />
                     )}
                     <CardMedia

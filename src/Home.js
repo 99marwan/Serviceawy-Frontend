@@ -53,7 +53,7 @@ const Home = () => {
   } = useFetch(
     `http://localhost:8085/service/loadServices/${currentPage}/${category}/${
       ReactSession.get("type") === "Manager" ? "false" : "true"
-    }`,currentPage,-2,category
+    }`,currentPage,category
   );
   
 
@@ -75,7 +75,7 @@ const Home = () => {
               services={services}
               title="All Services!"
               pageNum={pageNum}
-              tab={6}
+              tab={-1}
             />
           )}
           <div

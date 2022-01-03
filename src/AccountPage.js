@@ -18,24 +18,39 @@ import { ReactSession } from "react-client-session";
 import ServiceCards from "./ServiceCards";
 import useFetch from "./useFetch";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import TransactionCards from "./TransactionCards";
 
 const AccountPage = () => {
   const [value, setValue] = useState(0);
   const [url, setUrl] = useState(
-    `http://localhost:8085/user/loadServices/${ReactSession.get("username")}`
+    `http://localhost:8085/trans/providedTrans/${ReactSession.get(
+      "username"
+    )}/DONE`
   );
 
   const handleChange = (event, newValue) => {
     console.log(newValue);
     setValue(newValue);
-    if (newValue === 0) {
+    if (newValue === 1) {
       setUrl(
-        `http://localhost:8085/user/loadServices/${ReactSession.get(
+        `http://localhost:8085/trans/providedTrans/${ReactSession.get(
           "username"
-        )}`
+        )}/DONE`
       );
-    } else {
-      setUrl(`http://localhost:8085/user/loadServices/testuser2`);
+    } else if (newValue === 2) {
+      setUrl(
+        `http://localhost:8085/trans/providedTrans/${ReactSession.get(
+          "username"
+        )}/PENDING`
+      );
+    } else if (newValue === 3) {
+      setUrl(`http://localhost:8085/trans/requestedTrans/${ReactSession.get("userid")}/DONE`);
+    } else if (newValue === 4) {
+      setUrl(
+        `http://localhost:8085/trans/requestedTrans/${ReactSession.get(
+          "userid"
+        )}/PENDING`
+      );
     }
   };
 
@@ -50,8 +65,14 @@ const AccountPage = () => {
     },
 
   });
-
-  const { data: services, isPending, error } = useFetch(url, 1, value);
+  
+  const { data: services } = useFetch(
+    `http://localhost:8085/user/loadServices/${ReactSession.get("username")}`,
+    1,
+    "random"
+  ); 
+  const { data: transactions} = useFetch(url, 1, "random"); 
+  console.log(services)
 
   return (
     <div className="account-page">
@@ -113,12 +134,21 @@ const AccountPage = () => {
                   />
                 </Tabs>
               </Container>
-              {services && (
+              {value === 0 && services && (
                 <ServiceCards
                   services={services}
                   title="All Services!"
                   pageNum={1}
                   tab={value}
+                />
+              )}
+              {value != 0 && services && (
+                <TransactionCards
+                  transactions={transactions}
+                  title="All Services!"
+                  pageNum={1}
+                  tab={value}
+                  
                 />
               )}
             </Card>

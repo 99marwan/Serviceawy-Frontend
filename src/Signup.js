@@ -34,7 +34,7 @@ const Signup = () => {
 
   const [emailAddress, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [DOB, setDOB] = useState("");
+  const [dob, setdob] = useState("2022-01-01");
   const [password, setPassword] = useState("");
   const [cardNo, setCreditCard] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -49,13 +49,13 @@ const Signup = () => {
   const [emailAlreadyExist, setEmailAlreadyExist] = useState(true);
   const [usernameAlreadyExist, setUsernameAlreadyExist] = useState(true);
   const [checkRegCrediCard, setCheckRegCrediCard] = useState(true);
-  const reg = /^([a-zA-Z0-9_\\.]+)@([a-zA-Z]+).([a-zA-Z_.]+)$/;
+  const reg = /^([a-zA-Z0-9_\\.-]+)@([a-zA-Z]+).([a-zA-Z_.]+)$/;
   const reg2 = /^([a-zA-Z0-9_.]+)$/;
   const reg3 = /^([a-zA-Z0-9_\\.-]+)$/;
 
   const history = useHistory();
 
-  const account = { emailAddress, username, password, cardNo };
+  const account = { emailAddress, username, password, cardNo, dob };
 
 
   const handleEmail = (e) => {
@@ -80,8 +80,8 @@ const Signup = () => {
     setConfirmPassword(e.target.value);
     setRequiredField4(true);
   };
-  const handleDOB = (e) => {
-    setDOB(e.target.value);
+  const handledob = (e) => {
+    setdob(e.target.value);
   };
   const handleCreditCard = (e) => {
     setCreditCard(e.target.value);
@@ -243,6 +243,20 @@ const Signup = () => {
                     : "Username must include only letters, numbers, ., _, -") ||
                   (usernameAlreadyExist ? "" : "Username Already exists.")
                 }
+              />
+              <TextField
+                required
+                fullWidth
+                id="date"
+                label="Birthday"
+                type="date"
+                name="birthdate"
+                onChange={handledob}
+                value={dob}
+                
+                InputLabelProps={{
+                  shrink: true,
+                }}
               />
               <TextField
                 error={!requiredField3 || !checkRegPassword}
