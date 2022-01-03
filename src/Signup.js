@@ -22,13 +22,10 @@ import {
   Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
-import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { ReactSession } from "react-client-session";
-import AdapterDateFns from "@mui/lab/AdapterDateFns";
-import LocalizationProvider from "@mui/lab/LocalizationProvider";
-import DatePicker from "@mui/lab/DatePicker";
+
 
 const Signup = () => {
 
