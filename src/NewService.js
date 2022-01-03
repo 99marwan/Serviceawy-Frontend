@@ -139,7 +139,7 @@ export default function NewService(props) {
                 <MenuItem value={"Writing & Translation"}>
                   {"Writing & Translation"}
                 </MenuItem>
-                <MenuItem value={"Video & Animation "}>
+                <MenuItem value={"Video & Animation"}>
                   {"Video & Animation "}
                 </MenuItem>
                 <MenuItem value={"Music & Audio"}>{"Music & Audio"}</MenuItem>

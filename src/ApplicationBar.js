@@ -24,7 +24,7 @@ const ApplicationBar = () => {
     localStorage.clear()
     setAnchorElUser(null);
     history.push("/")
-    
+    window.location.reload();
   };
 
    const handleCloseUserMenu = () => {

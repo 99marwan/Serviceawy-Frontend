@@ -44,24 +44,6 @@ const Home = () => {
          console.log(err);
        })
   },[category])
-  fetch(
-    `http://localhost:8085/service/getPagesNum/${
-      ReactSession.get("type") === "Manager" ? "false" : "true"
-    }`
-  )
-    .then((res) => {
-      return res.json();
-    })
-    .then((data) => {
-      console.log(data);
-      setPageNum(data);
-    })
-    .catch((err) => {
-      console.log(err);
-    });
-
-    
-
     
   const {
     data: services,
