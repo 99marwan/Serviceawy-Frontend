@@ -9,44 +9,74 @@ const ServiceCards = (props) => {
     const services = props.services;
     const title = props.title;
     const pageNum = props.pageNum;
+    const tab = props.tab;
     
-    const handleAccept = () => {
-       return
+  const handleAccept = (service) => {
+    console.log(service);
+    service.accepted = true
+     fetch("http://localhost:8085/manager/acceptRejectNormalService", {
+       method: "PUT",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify(service),
+     }).then(() => {
+       console.log("service Accepted");
+       window.location.reload();
+     });
+   
     }
-    const handleDecline = () => {
-      return;
+    const handleDecline = (service) => {
+      fetch("http://localhost:8085/manager/acceptRejectNormalService", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(service),
+      }).then(() => {
+        console.log("service Rejected");
+        window.location.reload();
+      });
     };
   
     return (
       <div className="servcie-card">
+        {console.log(tab)}
         <Container sx={{ py: 2, maxHeight: "100%" }}>
           <h2 style={{ color: "#678983" }}>{title}</h2>
           {/* End hero unit */}
           <Grid container spacing={2}>
             {services.map((service) => (
-              <Grid item key={service.serviceid} xs={6} sm={4} md={4}>
-                <Link
-                  to={`/services/${service.serviceid}`}
-                  style={{ textDecoration: "none" }}
+              <Grid
+                item
+                key={tab > 0 ? service.transactionid : service.serviceid}
+                xs={6}
+                sm={4}
+                md={4}
+              >
+                <Card
+                  sx={{
+                    height: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    background: "#E6DDC4",
+                    color: "#535049",
+                  }}
                 >
-                  <Card
-                    sx={{
-                      height: "100%",
-                      display: "flex",
-                      flexDirection: "column",
-                      background: "#E6DDC4",
-                      color: "#535049",
-                    }}
+                  <Link
+                    to={`/services/${service.serviceid}`}
+                    style={{ textDecoration: "none", color: "#535049" }}
                   >
-                    <CardHeader
-                      avatar={
-                        <Avatar
-                          sx={{ width: 24, height: 24 }}
-                          aria-label="recipe"
-                        ></Avatar>
-                      }
-                      title={service.providername}
-                    />
+                    {ReactSession.set("service", service)}
+                    {tab != 0 && (
+                      <CardHeader
+                        avatar={
+                          <Avatar
+                            sx={{ width: 24, height: 24 }}
+                            aria-label="recipe"
+                          ></Avatar>
+                        }
+                        title={
+                           service.providername
+                        }
+                      />
+                    )}
                     <CardMedia
                       component="img"
                       height={180}
@@ -98,31 +128,31 @@ const ServiceCards = (props) => {
                         {service.price + "$"}
                       </Typography>
                     </Container>
-                    {ReactSession.get("type") === "Manager" && (
-                      <CardActions
-                        sx={{
-                          display: "flex",
-                          justifyContent: "space-between",
-                        }}
+                  </Link>
+                  {ReactSession.get("type") === "Manager" && (
+                    <CardActions
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                      }}
+                    >
+                      <Button
+                        variant="contained"
+                        color="error"
+                        onClick={() => handleDecline(service)}
                       >
-                        <Button
-                          variant="contained"
-                          color="error"
-                          onClick={handleDecline}
-                        >
-                          Decline
-                        </Button>
-                        <Button
-                          variant="contained"
-                          color="success"
-                          onClick={handleAccept}
-                        >
-                          Accept
-                        </Button>
-                      </CardActions>
-                    )}
-                  </Card>
-                </Link>
+                        Decline
+                      </Button>
+                      <Button
+                        variant="contained"
+                        color="success"
+                        onClick={() => handleAccept(service)}
+                      >
+                        Accept
+                      </Button>
+                    </CardActions>
+                  )}
+                </Card>
               </Grid>
             ))}
           </Grid>
