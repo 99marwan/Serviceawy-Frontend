@@ -47,6 +47,7 @@ export default function NewService(props) {
         setCategory("Graphics & Design");
         setPrice("");
         window.location.reload();
+        ReactSession.set("added", true);
         setOpen(false);
       });
     }    

@@ -31,7 +31,7 @@ const Home = () => {
      fetch(
        `http://localhost:8085/service/getPagesNum/${
          ReactSession.get("type") === "Manager" ? "false" : "true"
-       }`
+       }/${category}`
      )
        .then((res) => {
          return res.json();

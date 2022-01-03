@@ -10,6 +10,7 @@ import {
   Container,
   Grid,
   Avatar,
+  Alert,
 } from "@mui/material";
 import { ReactSession } from "react-client-session";
 import { display } from "@mui/system";
@@ -31,7 +32,8 @@ const ServiceDetails = () => {
         }
       ).then(() => {
         console.log("new service purchased");
-        window.location.reload();
+        ReactSession.set("bought",true)
+        history.push("/");
       });
     }
   };
@@ -75,7 +77,7 @@ const ServiceDetails = () => {
                 image="https://picsum.photos/400/300"
                 alt="Service Image"
               />
-              <Typography gutterBottom variant="h7">
+              <Typography gutterBottom variant="h6">
                 Service Detailed Description
               </Typography>
             </CardContent>

@@ -3,12 +3,14 @@ import  MenuIcon  from '@mui/icons-material/Menu'
 import { Link } from 'react-router-dom';
 import { ReactSession } from "react-client-session";
 import { useState, useEffect } from "react";
+import { useHistory } from "react-router-dom";
 
 const ApplicationBar = () => {
 
   
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
+  const history = useHistory();
 
    const handleOpenNavMenu = (event) => {
      setAnchorElNav(event.currentTarget);
@@ -21,7 +23,8 @@ const ApplicationBar = () => {
     setAnchorElNav(null);
     localStorage.clear()
     setAnchorElUser(null);
-    window.location.reload();
+    history.push("/")
+    
   };
 
    const handleCloseUserMenu = () => {
@@ -84,15 +87,17 @@ const ApplicationBar = () => {
                 open={Boolean(anchorElUser)}
                 onClose={handleCloseUserMenu}
               >
-                <Link
-                  to={`/${ReactSession.get("username")}`}
-                  style={{ textDecoration: "none" }}
-                >
-                  {" "}
-                  <MenuItem>
-                    <Typography textAlign="center">Profile</Typography>
-                  </MenuItem>
-                </Link>
+                {ReactSession.get("type") != "Manager" && (
+                  <Link
+                    to={`/${ReactSession.get("username")}`}
+                    style={{ textDecoration: "none", color: "#535049" }}
+                  >
+                    {" "}
+                    <MenuItem>
+                      <Typography textAlign="center">Profile</Typography>
+                    </MenuItem>
+                  </Link>
+                )}
 
                 <MenuItem onClick={handleCloseNavMenu}>
                   <Typography textAlign="center">Logout</Typography>
