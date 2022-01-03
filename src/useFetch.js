@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
+import { ReactSession } from "react-client-session";
 
-const useFetch = (url,currentPage, action) => {
+const useFetch = (url,currentPage, action, category) => {
   const [data, setData] = useState(null);
   const [isPending, setIsPendig] = useState(true);
   const [error, setError] = useState(null);
@@ -34,7 +35,7 @@ const useFetch = (url,currentPage, action) => {
     });
 
     return () => abortCont.abort();
-  }, [currentPage, action]);
+  }, [currentPage, action, category]);
     console.log(data)
   return { data, isPending, error };
 };

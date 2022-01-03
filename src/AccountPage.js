@@ -17,6 +17,7 @@ import { useState } from "react";
 import { ReactSession } from "react-client-session";
 import ServiceCards from "./ServiceCards";
 import useFetch from "./useFetch";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
 
 const AccountPage = () => {
   const [value, setValue] = useState(0);
@@ -38,73 +39,92 @@ const AccountPage = () => {
     }
   };
 
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#bd814b",
+      },
+      secondary: {
+        main: "#535049",
+      },
+    },
+
+  });
+
   const { data: services, isPending, error } = useFetch(url, 1, value);
 
   return (
     <div className="account-page">
-      <Container sx={{ py: 2, maxHeight: "100%" }}>
-        <Box
-          sx={{
-            marginTop: 8,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Avatar
-            alt={ReactSession.get("username")}
-            src="/broken-image.jpg"
-            sx={{ width: 100, height: 100 }}
-          />
-          <h2>{ReactSession.get("username")}</h2>
-          <Card
+      <ThemeProvider theme={theme}>
+        <Container sx={{ py: 2, maxHeight: "100%" }}>
+          <Box
             sx={{
+              marginTop: 8,
               display: "flex",
               flexDirection: "column",
-              alignContent: "center",
+              alignItems: "center",
             }}
           >
-            <Container
+            <Avatar
+              alt={ReactSession.get("username")}
+              src="/broken-image.jpg"
               sx={{
-                marginTop: 3,
-                marginBottom: 3,
+                width: 100,
+                height: 100,
+                bgcolor: "#678983",
+                fontSize: "50px",
+              }}
+            />
+            <h2>{ReactSession.get("username")}</h2>
+            <Card
+              sx={{
                 display: "flex",
-                flexDirection: "row",
-                justifyContent: "space-around",
+                flexDirection: "column",
+                alignContent: "center",
               }}
             >
-              <Tabs
-                value={value}
-                onChange={handleChange}
-                aria-label="icon label tabs example"
-                indicatorColor="secondary"
-                textColor="inherit"
-                sx={{ background: "1A5F7A" }}
+              <Container
+                sx={{
+                  marginTop: 3,
+                  marginBottom: 3,
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "space-around",
+                }}
               >
-                <Tab icon={<AssignmentIndIcon />} label="My Services" />
-                <Tab icon={<CheckCircleIcon />} label="Services Done" />
-                <Tab icon={<DryCleaningIcon />} label="Services Pending" />
-                <Tab
-                  icon={<CheckCircleOutlineOutlinedIcon />}
-                  label="Orders Done"
+                <Tabs
+                  value={value}
+                  onChange={handleChange}
+                  aria-label="icon label tabs example"
+                  indicatorColor="primary"
+                  textColor="secondary"
+                  sx={{ background: "1A5F7A" }}
+                >
+                  <Tab icon={<AssignmentIndIcon />} label="My Services" />
+                  <Tab icon={<CheckCircleIcon />} label="Services Done" />
+                  <Tab icon={<DryCleaningIcon />} label="Services Pending" />
+                  <Tab
+                    icon={<CheckCircleOutlineOutlinedIcon />}
+                    label="Orders Done"
+                  />
+                  <Tab
+                    icon={<DryCleaningOutlinedIcon />}
+                    label="Orders Pending"
+                  />
+                </Tabs>
+              </Container>
+              {services && (
+                <ServiceCards
+                  services={services}
+                  title="All Services!"
+                  pageNum={1}
+                  tab={value}
                 />
-                <Tab
-                  icon={<DryCleaningOutlinedIcon />}
-                  label="Orders Pending"
-                />
-              </Tabs>
-            </Container>
-            {services && (
-              <ServiceCards
-                services={services}
-                title="All Services!"
-                pageNum={1}
-                tab={value}
-              />
-            )}
-          </Card>
-        </Box>
-      </Container>
+              )}
+            </Card>
+          </Box>
+        </Container>
+      </ThemeProvider>
     </div>
   );
 };

@@ -22,9 +22,13 @@ import {
   Typography,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import DesktopDatePicker from "@mui/lab/DesktopDatePicker";
 import { useEffect, useState } from "react";
 import { useHistory } from "react-router-dom";
 import { ReactSession } from "react-client-session";
+import AdapterDateFns from "@mui/lab/AdapterDateFns";
+import LocalizationProvider from "@mui/lab/LocalizationProvider";
+import DatePicker from "@mui/lab/DatePicker";
 
 const Signup = () => {
 
@@ -32,23 +36,26 @@ const Signup = () => {
   const [username, setUsername] = useState("");
   const [DOB, setDOB] = useState("");
   const [password, setPassword] = useState("");
+  const [cardNo, setCreditCard] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [requiredField1, setRequiredField1] = useState(true);
   const [requiredField2, setRequiredField2] = useState(true);
   const [requiredField3, setRequiredField3] = useState(true);
   const [requiredField4, setRequiredField4] = useState(true);
+  const [requiredField5, setRequiredField5] = useState(true);
   const [checkRegEmail, setCheckRegEmail] = useState(true);
   const [checkRegUsername, setCheckRegUsername] = useState(true);
   const [checkRegPassword, setCheckRegPassword] = useState(true);
   const [emailAlreadyExist, setEmailAlreadyExist] = useState(true);
   const [usernameAlreadyExist, setUsernameAlreadyExist] = useState(true);
+  const [checkRegCrediCard, setCheckRegCrediCard] = useState(true);
   const reg = /^([a-zA-Z0-9_\\.]+)@([a-zA-Z]+).([a-zA-Z_.]+)$/;
   const reg2 = /^([a-zA-Z0-9_.]+)$/;
   const reg3 = /^([a-zA-Z0-9_\\.-]+)$/;
-  
+
   const history = useHistory();
 
-  const account = { emailAddress, username, password };
+  const account = { emailAddress, username, password, cardNo };
 
 
   const handleEmail = (e) => {
@@ -76,40 +83,56 @@ const Signup = () => {
   const handleDOB = (e) => {
     setDOB(e.target.value);
   };
-  const handleTest = (e) => {
-      if (emailAddress === "") {
-        setRequiredField1(false);
-      }
-      if (!reg.test(emailAddress)) {
-        setCheckRegEmail(false);
-      }
-      if (username === "") {
-        setRequiredField2(false);
-      }
-      if (!reg3.test(username)) {
-        setCheckRegUsername(false);
-      }
-      if (password === "") {
-        setRequiredField3(false);
-      }
-      if (!reg3.test(password) || password.length < 8) {
-        setCheckRegPassword(false);
-      }
-      if (confirmPassword === "") {
-        setRequiredField4(false);
-      }
+  const handleCreditCard = (e) => {
+    setCreditCard(e.target.value);
+    setRequiredField5(true);
+    setCheckRegCrediCard(true);
   };
-  const handleSignup = (e) => {  
-    if (!(requiredField1 && requiredField2 && requiredField3 && requiredField4)) {
+  const handleTest = (e) => {
+    if (emailAddress === "") {
+      setRequiredField1(false);
+    }
+    if (!reg.test(emailAddress)) {
+      setCheckRegEmail(false);
+    }
+    if (username === "") {
+      setRequiredField2(false);
+    }
+    if (!reg3.test(username)) {
+      setCheckRegUsername(false);
+    }
+    if (password === "") {
+      setRequiredField3(false);
+    }
+    if (!reg3.test(password) || password.length < 8) {
+      setCheckRegPassword(false);
+    }
+    if (confirmPassword === "") {
+      setRequiredField4(false);
+    }
+    if (cardNo === "") {
+      setRequiredField5(false);
+    }
+    if (cardNo.length != 16) {
+      setCheckRegCrediCard(false);
+    }
+  };
+  const handleSignup = (e) => {
+    if (!(requiredField1 && requiredField2 && requiredField3 && requiredField4 && requiredField5)) {
       console.log("if1");
     }
-    else if (!(checkRegEmail && checkRegUsername && checkRegPassword)) {
+    else if (
+      !(
+        checkRegEmail &&
+        checkRegUsername &&
+        checkRegPassword &&
+        checkRegCrediCard
+      )
+    ) {
       console.log("if2");
-    }
-    else if (password != confirmPassword) {
+    } else if (password != confirmPassword) {
       console.log("if3");
-    }
-    else {
+    } else {
       console.log("here");
       fetch("http://localhost:8085/user/signUp", {
         method: "POST",
@@ -126,28 +149,24 @@ const Signup = () => {
             if (data === "Username Already Exists") {
               setUsernameAlreadyExist(false);
             }
-          }
-          else if (data === "Username Already Exists") {
+          } else if (data === "Username Already Exists") {
             setUsernameAlreadyExist(false);
             if (data === "Email Address Already Exists") {
               setEmailAlreadyExist(false);
             }
-          }
-          
-          else {
-            console.log("new user added")
+          } else {
+            console.log("new user added");
             ReactSession.set("username", data.username);
             ReactSession.set("userid", data.userid);
             ReactSession.set("type", "User");
             history.push("/");
           }
-          
         })
         .catch((err) => {
           console.log(err);
           setEmailAlreadyExist(false);
         });
-    } 
+    }
   };
 
   useEffect(() => {
@@ -259,6 +278,22 @@ const Signup = () => {
                 onChange={handleConfirmPassword}
                 autoComplete="off"
               />
+              <TextField
+                error={!requiredField5 || !checkRegCrediCard}
+                helperText={
+                  (requiredField5 ? "" : "This field cannot be empty.") ||
+                  (checkRegCrediCard ? "" : "Credit Card must be 16 chars")
+                }
+                required
+                margin="normal"
+                id="Credit-Card"
+                label="Credit Card"
+                type="number"
+                value={cardNo}
+                onChange={handleCreditCard}
+                autoComplete="off"
+              />
+
               <Button
                 onClick={handleSignup}
                 variant="contained"

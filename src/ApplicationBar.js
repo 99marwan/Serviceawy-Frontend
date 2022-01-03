@@ -64,7 +64,7 @@ const ApplicationBar = () => {
                   <Avatar
                     alt={ReactSession.get("username")}
                     src="/broken-image.jpg"
-                    sx={{ marginLeft: 2 }}
+                    sx={{ marginLeft: 2, bgcolor: "#678983" }}
                   />
                 </IconButton>
               </Tooltip>

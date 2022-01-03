@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { ReactSession } from "react-client-session";
 import ServiceDetails from './ServiceDetails';
 import AccountPage from './AccountPage';
+import CategoryBar from './CategoryBar';
 
 function App() {
   ReactSession.setStoreType("localStorage");
@@ -17,6 +18,7 @@ function App() {
         <Switch>
           <Route exact path="/">
             <ApplicationBar />
+            
             <Home />
           </Route>
           <Route exact path="/Login">
