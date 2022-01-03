@@ -19,9 +19,21 @@ import { useHistory } from "react-router-dom";
 const ServiceDetails = () => {
   const history = useHistory();
   const service = ReactSession.get("service");
-  console.log(service);
   const handleBuy = (e) => {
     if (!ReactSession.get("username")) history.push("/Login");
+    else {
+      fetch(
+        `http://localhost:8085/trans/buyService/${ReactSession.get("userid")}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(service),
+        }
+      ).then(() => {
+        console.log("new service purchased");
+        window.location.reload();
+      });
+    }
   };
   return (
     <div className="service-details">
@@ -73,18 +85,20 @@ const ServiceDetails = () => {
               <Typography gutterBottom variant="h6">
                 {"Price:   " + service.price + "$"}
               </Typography>
-              <Button
-                variant="contained"
-                sx={{
-                  marginTop: 5,
+              {ReactSession.get("username") !== service.providername && (
+                <Button
+                  variant="contained"
+                  sx={{
+                    marginTop: 5,
 
-                  background: "#c3195d",
-                  backgroundColor: "#bd814b",
-                }}
-                onClick={handleBuy}
-              >
-                buy
-              </Button>
+                    background: "#c3195d",
+                    backgroundColor: "#bd814b",
+                  }}
+                  onClick={handleBuy}
+                >
+                  buy
+                </Button>
+              )}
             </CardActions>
           </Card>
         </Grid>
