@@ -50,7 +50,7 @@ const CategoryBar = (props) => {
           >
             <Tab id="random" label="Random" />
             <Tab id="Graphics & Design" label="Graphics & Design" />
-            <Tab id="My Digital Marketing" label="My Digital Marketing" />
+            <Tab id="Digital Marketing" label="Digital Marketing" />
             <Tab id="Writing & Translation" label="Writing & Translation" />
             <Tab id="Video & Animation" label="Video & Animation" />
             <Tab id="Music & Audio" label="Music & Audio" />
