@@ -48,9 +48,9 @@ const CategoryBar = (props) => {
             textColor="secondary"
             sx={{ background: "1A5F7A", fontSize: 10 }}
           >
-            <Tab id="random" label="Random" />
+            <Tab id="random" label="All" />
             <Tab id="Graphics & Design" label="Graphics & Design" />
-            <Tab id="My Digital Marketing" label="My Digital Marketing" />
+            <Tab id= "Digital Marketing" label="Digital Marketing" />
             <Tab id="Writing & Translation" label="Writing & Translation" />
             <Tab id="Video & Animation" label="Video & Animation" />
             <Tab id="Music & Audio" label="Music & Audio" />

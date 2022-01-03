@@ -13,31 +13,31 @@ import { useHistory } from "react-router-dom";
 import { ReactSession } from "react-client-session";
 
 export default function NewService(props) {
-  const providerid = ReactSession.get("userid");
+  const providername = ReactSession.get("username");
 
   const [open, setOpen] = useState(false);
   const [serviceDescription, setDescription] = useState("");
   const [serviceCategory, setCategory] = useState("Graphics & Design");
   const [price, setPrice] = useState("");
-
-
   const [serviceDescriptionReq, setDescriptionReq] = useState(true);
- 
   const [priceReq, setPriceReq] = useState(true);
+  const accepted = 0;
+
   const history = useHistory();
   
 
   const handleAdd = (e) => {
     e.preventDefault();
     const service = {
-      providerid,
+      providername,
       serviceDescription,
       serviceCategory,
       price,
+      accepted
     };
     
     if (serviceDescription != "" && price != "") {
-      fetch("http://localhost:8085/service/addNormalService", {
+      fetch("http://localhost:8085/user/addNormalService", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(service),

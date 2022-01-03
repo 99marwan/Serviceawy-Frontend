@@ -26,23 +26,24 @@ const TransactionCards = (props) => {
     const tab = props.tab;
 
 
-  const handleAccept = (service) => {
-    console.log(service);
-    service.accepted = true;
-    fetch("http://localhost:8085/manager/acceptRejectNormalService", {
+  const handleAccept = (transaction) => {
+    console.log(transaction);
+    transaction.status = "DONE";
+    fetch("http://localhost:8085/user/acceptRejectTrans", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(service),
+      body: JSON.stringify(transaction),
     }).then(() => {
       console.log("service Accepted");
       window.location.reload();
     });
   };
-  const handleDecline = (service) => {
-    fetch("http://localhost:8085/manager/acceptRejectNormalService", {
+    const handleDecline = (transaction) => {
+    transaction.status = "REJECTED";
+    fetch("http://localhost:8085/user/acceptRejectTrans", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(service),
+      body: JSON.stringify(transaction),
     }).then(() => {
       console.log("service Rejected");
       window.location.reload();
@@ -66,10 +67,7 @@ const TransactionCards = (props) => {
                   color: "#535049",
                 }}
               >
-                <Link
-                  to={`/services/${transaction.serviceid}`}
-                  style={{ textDecoration: "none", color: "#535049" }}
-                >
+                
                   {tab != 1 && tab != 2 && (
                     <CardHeader
                       avatar={
@@ -96,6 +94,15 @@ const TransactionCards = (props) => {
                       sx={{ fontSize: 16 }}
                     >
                       {transaction.service.serviceDescription}
+                          </Typography>
+                         
+                    <Typography
+                      gutterBottom
+                      variant="subtitle2"
+                      component="div"
+                      sx={{ fontSize: 16 }}
+                    >
+                      customer
                     </Typography>
                   </CardContent>
 
@@ -133,7 +140,7 @@ const TransactionCards = (props) => {
                       {transaction.service.price + "$"}
                     </Typography>
                   </Container>
-                </Link>
+            
                 {tab == 2 && (
                   <CardActions
                     sx={{
