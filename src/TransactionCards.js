@@ -96,14 +96,14 @@ const TransactionCards = (props) => {
                       {transaction.service.serviceDescription}
                           </Typography>
                          
-                    <Typography
-                      gutterBottom
-                      variant="subtitle2"
-                      component="div"
-                      sx={{ fontSize: 16 }}
-                    >
-                      customer
-                    </Typography>
+                  {(tab === 1 || tab === 2 ) &&<Typography
+                    gutterBottom
+                    variant="subtitle2"
+                    component="div"
+                    sx={{ fontSize: 16 }}
+                  >
+                    customer
+                  </Typography>}
                   </CardContent>
 
                   <hr

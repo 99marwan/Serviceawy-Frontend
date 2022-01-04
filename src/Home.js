@@ -8,6 +8,7 @@ import { orange } from "@mui/material/colors";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { purple } from "@mui/material/colors";
 import CategoryBar from "./CategoryBar";
+import AlertsBar from "./AlertsBar";
 
 const Home = () => {
 
@@ -39,6 +40,7 @@ const Home = () => {
        .then((data) => {
          console.log(data);
          setPageNum(data);
+         setPage(1)
        })
        .catch((err) => {
          console.log(err);
@@ -60,7 +62,7 @@ const Home = () => {
       <div className="home">
         <ThemeProvider theme={theme}>
           <CategoryBar setCategory={setCategory} />
-          {console.log(category)}
+          <AlertsBar />
           {/*error && <div>{error}</div>*/}
           {isPending && <div>Loading....</div>}
           {/*as blogs it null until fetch finished

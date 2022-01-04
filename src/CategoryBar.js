@@ -1,10 +1,4 @@
 import {
-  Avatar,
-  Box,
-  Button,
-  Card,
-  Container,
-  Grid,
   Tab,
   Tabs,
 } from "@mui/material";
@@ -13,7 +7,8 @@ import { ReactSession } from "react-client-session";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 const CategoryBar = (props) => {
 
-    const [value, setValue] = useState(0);
+  const [value, setValue] = useState(0);
+ 
     const setCategory = props.setCategory;
 
     const handleChange = (event, newValue) => {
@@ -58,6 +53,8 @@ const CategoryBar = (props) => {
             <Tab id="Business" label="Business" />
             <Tab id="Lifestyle" label="Lifestyle" />
           </Tabs>
+
+          
         </ThemeProvider>
       </div>
     );

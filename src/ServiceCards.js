@@ -57,27 +57,7 @@ const ServiceCards = (props) => {
   return (
     <div className="servcie-card">
       {console.log(tab)}
-      {ReactSession.get("bought") && (
-        <Alert
-          onClose={() => {
-            ReactSession.set("bought", false);
-            window.location.reload();
-          }}
-        >
-          Service is bought and in pending state now
-        </Alert>
-      )}
       
-      {ReactSession.get("added") && (
-        <Alert
-          onClose={() => {
-            ReactSession.set("added", false);
-            window.location.reload();
-          }}
-        >
-          Service is Added and in pending state now
-        </Alert>
-      )}
 
       <Container sx={{ py: 2, maxHeight: "100%" }}>
         <h2 style={{ color: "#678983" }}>{title}</h2>
@@ -114,6 +94,14 @@ const ServiceCards = (props) => {
                         ></Avatar>
                       }
                       title={service.providername}
+                    />
+                  )}
+                  {tab === 0 && (
+                    <CardHeader
+                      titleTypographyProps={{ variant: "body2" }}
+                      title={
+                        "Status : " + (service.accepted ? "done" : "pending")
+                      }
                     />
                   )}
                   <CardMedia

@@ -140,7 +140,7 @@ export default function NewService(props) {
                   {"Writing & Translation"}
                 </MenuItem>
                 <MenuItem value={"Video & Animation"}>
-                  {"Video & Animation "}
+                  {"Video & Animation"}
                 </MenuItem>
                 <MenuItem value={"Music & Audio"}>{"Music & Audio"}</MenuItem>
                 <MenuItem value={"Programming & Tech"}>
