@@ -68,18 +68,18 @@ const ApplicationBar = () => {
               <Button sx={{ color: "#ffffff" }}>Login</Button>
             </Link>
           )}
-
-          <ThemeProvider theme={theme}>
-            <Link to={`/custom_services`} style={{ textDecoration: "none" }}>
-              <Button
-                color="primary"
-                variant="contained"
-                sx={{ marginRight: 16 }}
-              >
-                Custom Services
-              </Button>
-            </Link>
-          </ThemeProvider>
+          {ReactSession.get("username") != null &&
+            <ThemeProvider theme={theme}>
+              <Link to={`/custom_services`} style={{ textDecoration: "none" }}>
+                <Button
+                  color="primary"
+                  variant="contained"
+                  sx={{ marginRight: 16 }}
+                >
+                  Custom Services
+                </Button>
+              </Link>
+            </ThemeProvider>}
 
           {ReactSession.get("username") != null && (
             <h4> {ReactSession.get("username")} </h4>
@@ -117,7 +117,6 @@ const ApplicationBar = () => {
                     to={`/${ReactSession.get("username")}`}
                     style={{ textDecoration: "none", color: "#535049" }}
                   >
-                    {" "}
                     <MenuItem>
                       <Typography textAlign="center">Profile</Typography>
                     </MenuItem>
