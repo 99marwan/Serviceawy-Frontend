@@ -27,11 +27,21 @@ const AccountPage = () => {
       "username"
     )}/DONE`
   );
+   const [urlService, setUrlService] = useState(
+     `http://localhost:8085/user/loadServices/${ReactSession.get("username")}`
+   );
 
   const handleChange = (event, newValue) => {
     console.log(newValue);
     setValue(newValue);
-    if (newValue === 1) {
+   if (newValue === 0) {
+      setUrlService(
+        `http://localhost:8085/user/loadServices/${ReactSession.get(
+          "username"
+        )}`
+      );
+    }
+    else if (newValue === 1) {
       setUrl(
         `http://localhost:8085/trans/providedTrans/${ReactSession.get(
           "username"
@@ -44,12 +54,20 @@ const AccountPage = () => {
         )}/PENDING`
       );
     } else if (newValue === 3) {
-      setUrl(`http://localhost:8085/trans/requestedTrans/${ReactSession.get("userid")}/DONE`);
+      setUrl(
+        `http://localhost:8085/trans/requestedTrans/${ReactSession.get(
+          "userid"
+        )}/DONE`
+      );
     } else if (newValue === 4) {
       setUrl(
         `http://localhost:8085/trans/requestedTrans/${ReactSession.get(
           "userid"
         )}/PENDING`
+      );
+    } else if (newValue === 5) {
+      setUrlService(
+        `http://localhost:8085/user/loadServices/marwansaad`
       );
     }
   };
@@ -67,7 +85,7 @@ const AccountPage = () => {
   });
   
   const { data: services } = useFetch(
-    `http://localhost:8085/user/loadServices/${ReactSession.get("username")}`,
+    urlService,
     1,
     "random"
   ); 
@@ -132,23 +150,27 @@ const AccountPage = () => {
                     icon={<DryCleaningOutlinedIcon />}
                     label="Orders Pending"
                   />
+                  <Tab
+                    icon={<DryCleaningOutlinedIcon />}
+                    label="Custom Services"
+                  />
                 </Tabs>
               </Container>
-              {value === 0 && services && (
+              {(value === 0 || value == 5) && services && (
                 <ServiceCards
                   services={services}
                   title="All Services!"
                   pageNum={1}
                   tab={value}
+                  page={value === 0 ? "Home" : "Custom"}
                 />
               )}
-              {value != 0 && services && (
+              {value != 0 && value != 5 && services && (
                 <TransactionCards
                   transactions={transactions}
                   title="All Services!"
                   pageNum={1}
                   tab={value}
-                  
                 />
               )}
             </Card>

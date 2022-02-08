@@ -70,15 +70,22 @@ const Home = () => {
            */}
 
           {ReactSession.get("username") &&
-            ReactSession.get("type") === "User" && <NewService />}
+            ReactSession.get("type") === "User" && (
+              <NewService page={"Home"} />
+            )}
+         
+         
           {services && (
             <ServiceCards
               services={services}
               title="All Services!"
               pageNum={pageNum}
               tab={-1}
+              page={"home"}
             />
           )}
+
+
           <div
             style={{
               display: "flex",

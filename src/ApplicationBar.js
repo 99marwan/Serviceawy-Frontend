@@ -4,9 +4,10 @@ import { Link } from 'react-router-dom';
 import { ReactSession } from "react-client-session";
 import { useState, useEffect } from "react";
 import { useHistory } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+
 
 const ApplicationBar = () => {
-
   
   const [anchorElNav, setAnchorElNav] = useState(null);
   const [anchorElUser, setAnchorElUser] = useState(null);
@@ -29,7 +30,16 @@ const ApplicationBar = () => {
 
    const handleCloseUserMenu = () => {
      setAnchorElUser(null);
-   };
+  };
+  
+  const theme = createTheme({
+    palette: {
+      primary: {
+        main: "#bd814b",
+      },
+    },
+  });
+
     return (
       <AppBar position="static" sx={{ background: "#535049" }}>
         <Toolbar>
@@ -52,14 +62,29 @@ const ApplicationBar = () => {
               Serviceawy
             </Link>
           </Typography>
+
           {ReactSession.get("username") == null && (
             <Link to={`/login`} style={{ textDecoration: "none" }}>
               <Button sx={{ color: "#ffffff" }}>Login</Button>
             </Link>
           )}
+
+          <ThemeProvider theme={theme}>
+            <Link to={`/custom_services`} style={{ textDecoration: "none" }}>
+              <Button
+                color="primary"
+                variant="contained"
+                sx={{ marginRight: 16 }}
+              >
+                Custom Services
+              </Button>
+            </Link>
+          </ThemeProvider>
+
           {ReactSession.get("username") != null && (
             <h4> {ReactSession.get("username")} </h4>
           )}
+
           {ReactSession.get("username") != null && (
             <Box sx={{ flexGrow: 0 }}>
               <Tooltip title="Open settings">

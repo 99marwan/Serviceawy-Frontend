@@ -13,6 +13,10 @@ import { useHistory } from "react-router-dom";
 import { ReactSession } from "react-client-session";
 
 export default function NewService(props) {
+
+  const page = props.page;
+  const bid = props.bid;
+
   const providername = ReactSession.get("username");
 
   const [open, setOpen] = useState(false);
@@ -28,16 +32,24 @@ export default function NewService(props) {
 
   const handleAdd = (e) => {
     e.preventDefault();
-    const service = {
-      providername,
-      serviceDescription,
-      serviceCategory,
-      price,
-      accepted
-    };
+    let service;
+    let url;
+
+
+    if (page === "Home") {
+      service = {
+        providername,
+        serviceDescription,
+        serviceCategory,
+        price,
+        accepted
+      };
+      url = "http://localhost:8085/user/addNormalService"
+    }
     
+
     if (serviceDescription != "" && price != "") {
-      fetch("http://localhost:8085/user/addNormalService", {
+      fetch(url, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(service),
@@ -89,8 +101,9 @@ export default function NewService(props) {
           sx={{ mt: 3, mr: 4, background: "#bd814b" }}
           onClick={handleClickOpen}
         >
-          Add Service
-        </Button>
+
+          {bid === 1 ? "Add Bid" : page==="Home" ? "Add Service" : "Add Custom Service"}
+        </Button> 
       </div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>New Service</DialogTitle>
@@ -112,7 +125,9 @@ export default function NewService(props) {
             required
             margin="normal"
             id="ServiceDescription"
-            label="ServiceDescription"
+            label={
+              page == "Home" ? "Service Description" : "Custom Service Description"
+            }
             value={serviceDescription}
             onChange={(e) => {
               setDescription(e.target.value);
@@ -120,7 +135,8 @@ export default function NewService(props) {
             }}
             autoComplete="off"
           />
-          <Box sx={{ minWidth: 120, marginTop: 1 }}>
+          {bid != 1 &&
+            <Box sx={{ minWidth: 120, marginTop: 1 }}>
             <FormControl fullWidth>
               <InputLabel id="category-label">Category</InputLabel>
               <Select
@@ -150,14 +166,14 @@ export default function NewService(props) {
                 <MenuItem value={"Lifestyle"}>{"Lifestyle"}</MenuItem>
               </Select>
             </FormControl>
-          </Box>
+          </Box>}
           <TextField
             error={!priceReq}
             helperText={priceReq ? "" : "This field cannot be empty."}
             required
             margin="normal"
             id="price"
-            label="price"
+            label={page == "Home" ? "price" : "Upper price"}
             type="number"
             value={price}
             onChange={(e) => {

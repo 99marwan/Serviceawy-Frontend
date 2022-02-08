@@ -1,5 +1,4 @@
 import {
-  Alert,
   Avatar,
   Button,
   Card,
@@ -7,25 +6,25 @@ import {
   CardContent,
   CardHeader,
   CardMedia,
-  Collapse,
   Container,
   Grid,
-  IconButton,
-  Pagination,
-  Stack,
+
   Typography,
 } from "@mui/material";
-import NewService from "./NewService";
+
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
 import { ReactSession } from "react-client-session";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import NewService from "./NewService";
 
 const ServiceCards = (props) => {
   const services = props.services;
   const title = props.title;
   const pageNum = props.pageNum;
   const tab = props.tab;
+  const page = props.page
+
+
   const handleClick = (value) => (event) => {
     console.log(value);
     ReactSession.set("service", value);
@@ -54,10 +53,17 @@ const ServiceCards = (props) => {
     });
   };
 
+   const theme = createTheme({
+     palette: {
+       primary: {
+         main: "#bd814b",
+       },
+     },
+   });
+
   return (
     <div className="servcie-card">
       {console.log(tab)}
-      
 
       <Container sx={{ py: 2, maxHeight: "100%" }}>
         <h2 style={{ color: "#678983" }}>{title}</h2>
@@ -66,7 +72,7 @@ const ServiceCards = (props) => {
           {services.map((service) => (
             <Grid
               item
-              key={tab > 0 ? service.transactionid : service.serviceid}
+              key={service.serviceid}
               xs={6}
               sm={4}
               md={4}
@@ -85,7 +91,7 @@ const ServiceCards = (props) => {
                   style={{ textDecoration: "none", color: "#535049" }}
                   onClick={handleClick(service)}
                 >
-                  {tab != 0 && (
+                  {tab != 0 && tab != 5 && (
                     <CardHeader
                       avatar={
                         <Avatar
@@ -96,7 +102,7 @@ const ServiceCards = (props) => {
                       title={service.providername}
                     />
                   )}
-                  {tab === 0 && (
+                  {(tab === 0 || tab === 5) && (
                     <CardHeader
                       titleTypographyProps={{ variant: "body2" }}
                       title={
@@ -104,12 +110,14 @@ const ServiceCards = (props) => {
                       }
                     />
                   )}
-                  <CardMedia
-                    component="img"
-                    height={180}
-                    image="https://picsum.photos/400/300"
-                    alt="random"
-                  />
+                  {page == "Home" && (
+                    <CardMedia
+                      component="img"
+                      height={180}
+                      image="https://picsum.photos/400/300"
+                      alt="random"
+                    />
+                  )}
                   <CardContent sx={{ flexGrow: 1 }}>
                     <Typography
                       gutterBottom
@@ -156,6 +164,18 @@ const ServiceCards = (props) => {
                     </Typography>
                   </Container>
                 </Link>
+
+                {page === "Custom" && tab != 5 && (
+                  <CardActions
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <NewService bid={ 1 }/>
+                  </CardActions>
+                )}
+
                 {ReactSession.get("type") === "Manager" && (
                   <CardActions
                     sx={{

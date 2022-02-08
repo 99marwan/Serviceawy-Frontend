@@ -119,7 +119,7 @@ const ServiceDetails = () => {
                 component="img"
                 height={180}
                 width={180}
-                image="https://picsum.photos/1024/1024"
+                image="https://picsum.photos/1024/10243"
                 alt="random"
               />
 

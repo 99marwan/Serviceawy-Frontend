@@ -8,6 +8,7 @@ import { useState } from 'react';
 import { ReactSession } from "react-client-session";
 import ServiceDetails from './ServiceDetails';
 import AccountPage from './AccountPage';
+import CustomServices from "./CustomServices";
 import CategoryBar from './CategoryBar';
 
 function App() {
@@ -18,7 +19,6 @@ function App() {
         <Switch>
           <Route exact path="/">
             <ApplicationBar />
-            
             <Home />
           </Route>
           <Route exact path="/Login">
@@ -27,11 +27,15 @@ function App() {
           <Route exact path="/Signup">
             <Signup />
           </Route>
-          <Route path="/services/:serviceid">
+          <Route exact path="/custom_services">
+            <ApplicationBar />
+            <CustomServices />
+          </Route>
+          <Route exact path="/services/:serviceid">
             <ApplicationBar />
             <ServiceDetails />
           </Route>
-          <Route path="/:username">
+          <Route exact path="/:username">
             <ApplicationBar />
             <AccountPage />
           </Route>
