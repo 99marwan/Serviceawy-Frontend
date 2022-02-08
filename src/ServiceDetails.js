@@ -14,13 +14,14 @@ import {
   Box,
 } from "@mui/material";
 import { ReactSession } from "react-client-session";
-import { display } from "@mui/system";
-import { alignProperty } from "@mui/material/styles/cssUtils";
 import { useHistory } from "react-router-dom";
+import NewService from "./NewService";
 
-const ServiceDetails = () => {
+const ServiceDetails = (props) => {
   const history = useHistory();
   const service = ReactSession.get("service");
+  const bid = props.bid;
+  const tab = props.tab;
 
     const handleAccept = () => {
       console.log(service);
@@ -117,9 +118,9 @@ const ServiceDetails = () => {
               </Typography>
               <CardMedia
                 component="img"
-                height={180}
+                height={360}
                 width={180}
-                image="https://picsum.photos/1024/10243"
+                image="https://picsum.photos/1024/1024"
                 alt="random"
               />
 
@@ -179,10 +180,13 @@ const ServiceDetails = () => {
               sx={{ justifyContent: "space-around", alignItems: "baseline" }}
             >
               <Typography gutterBottom variant="h6">
-                {"Price:   " + service.price + "$"}
+                {bid != 1
+                  ? "Price:   " + service.price + "$"
+                  : "Upper Price:   " + service.price + "$"}
               </Typography>
               {ReactSession.get("username") !== service.providername &&
-                ReactSession.get("type") != "Manager" && (
+                ReactSession.get("type") != "Manager" &&
+                bid != 1 && (
                   <Button
                     variant="contained"
                     sx={{
@@ -196,6 +200,9 @@ const ServiceDetails = () => {
                     buy
                   </Button>
                 )}
+              {ReactSession.get("username") !== service.providername &&
+                ReactSession.get("type") != "Manager" &&
+                bid === 1 && tab != 5 &&<NewService bid={1} />}
             </CardActions>
 
             {ReactSession.get("type") === "Manager" && (

@@ -31,6 +31,14 @@ function App() {
             <ApplicationBar />
             <CustomServices />
           </Route>
+          <Route exact path="/account_custom_services/:serviceid">
+            <ApplicationBar />
+            <ServiceDetails tab={5} bid={ 1 }/>
+          </Route>
+          <Route exact path="/custom_services/:serviceid">
+            <ApplicationBar />
+            <ServiceDetails bid={1} />
+          </Route>
           <Route exact path="/services/:serviceid">
             <ApplicationBar />
             <ServiceDetails />

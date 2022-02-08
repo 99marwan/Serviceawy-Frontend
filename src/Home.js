@@ -81,7 +81,7 @@ const Home = () => {
               title="All Services!"
               pageNum={pageNum}
               tab={-1}
-              page={"home"}
+              page={"Home"}
             />
           )}
 

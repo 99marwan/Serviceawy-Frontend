@@ -7,8 +7,9 @@ import { useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CategoryBar from "./CategoryBar";
 import AlertsBar from "./AlertsBar";
+import Bids from "./Bids";
 
-const Home = () => {
+const CustomServices = () => {
   const [pageNum, setPageNum] = useState(0);
   const [currentPage, setPage] = useState(1);
   const [category, setCategory] = useState("random");
@@ -58,13 +59,13 @@ const Home = () => {
 
     
   return (
-    <div className="home">
+    <div className="custom_services">
       <ThemeProvider theme={theme}>
         <CategoryBar setCategory={setCategory} />
         <AlertsBar />
 
         {isPending && <div>Loading....</div>}
-
+    
         {ReactSession.get("username") &&
           ReactSession.get("type") === "User" && <NewService page={"Custom"} />}
         {services && (
@@ -95,4 +96,4 @@ const Home = () => {
   );
 };
 
-export default Home;
+export default CustomServices;

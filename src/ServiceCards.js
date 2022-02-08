@@ -16,6 +16,7 @@ import { Link } from "react-router-dom";
 import { ReactSession } from "react-client-session";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import NewService from "./NewService";
+import Bids from "./Bids";
 
 const ServiceCards = (props) => {
   const services = props.services;
@@ -63,20 +64,12 @@ const ServiceCards = (props) => {
 
   return (
     <div className="servcie-card">
-      {console.log(tab)}
-
       <Container sx={{ py: 2, maxHeight: "100%" }}>
         <h2 style={{ color: "#678983" }}>{title}</h2>
         {/* End hero unit */}
         <Grid container spacing={2}>
           {services.map((service) => (
-            <Grid
-              item
-              key={service.serviceid}
-              xs={6}
-              sm={4}
-              md={4}
-            >
+            <Grid item key={service.serviceid} xs={6} sm={4} md={4}>
               <Card
                 sx={{
                   height: "100%",
@@ -87,7 +80,13 @@ const ServiceCards = (props) => {
                 }}
               >
                 <Link
-                  to={`/services/${service.serviceid}`}
+                  to={
+                    page === "Home"
+                      ? `/services/${service.serviceid}`
+                      : tab === 5
+                      ? `/account_custom_services/${service.serviceid}`
+                      : `/custom_services/${service.serviceid}`
+                  }
                   style={{ textDecoration: "none", color: "#535049" }}
                   onClick={handleClick(service)}
                 >
@@ -172,7 +171,18 @@ const ServiceCards = (props) => {
                       justifyContent: "center",
                     }}
                   >
-                    <NewService bid={ 1 }/>
+                    <NewService bid={1} />
+                  </CardActions>
+                )}
+
+                {page === "Custom" && tab === 5 && (
+                  <CardActions
+                    sx={{
+                      display: "flex",
+                      justifyContent: "center",
+                    }}
+                  >
+                    <Bids />
                   </CardActions>
                 )}
 

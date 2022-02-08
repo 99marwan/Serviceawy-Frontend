@@ -23,8 +23,10 @@ export default function NewService(props) {
   const [serviceDescription, setDescription] = useState("");
   const [serviceCategory, setCategory] = useState("Graphics & Design");
   const [price, setPrice] = useState("");
+  const [days, setDays] = useState("");
   const [serviceDescriptionReq, setDescriptionReq] = useState(true);
   const [priceReq, setPriceReq] = useState(true);
+  const [daysReq, setDaysReq] = useState(true);
   const accepted = 0;
 
   const history = useHistory();
@@ -58,6 +60,7 @@ export default function NewService(props) {
         setDescription("");
         setCategory("Graphics & Design");
         setPrice("");
+        setDays("");
         window.location.reload();
         ReactSession.set("added", true);
         setOpen(false);
@@ -74,6 +77,7 @@ export default function NewService(props) {
     setDescription("");
     setCategory("Graphics & Design");
     setPrice("");
+    setDays("");
     setOpen(false);
   };
 
@@ -83,6 +87,10 @@ export default function NewService(props) {
     }
     if (price === "") {
       setPriceReq(false);
+    }
+    if (bid === 1) {
+      if (days === "")
+        setDaysReq(false);
     }
   });
 
@@ -101,9 +109,12 @@ export default function NewService(props) {
           sx={{ mt: 3, mr: 4, background: "#bd814b" }}
           onClick={handleClickOpen}
         >
-
-          {bid === 1 ? "Add Bid" : page==="Home" ? "Add Service" : "Add Custom Service"}
-        </Button> 
+          {bid === 1
+            ? "Add Bid"
+            : page === "Home"
+            ? "Add Service"
+            : "Add Custom Service"}
+        </Button>
       </div>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>New Service</DialogTitle>
@@ -126,7 +137,9 @@ export default function NewService(props) {
             margin="normal"
             id="ServiceDescription"
             label={
-              page == "Home" ? "Service Description" : "Custom Service Description"
+              page == "Home"
+                ? "Service Description"
+                : "Custom Service Description"
             }
             value={serviceDescription}
             onChange={(e) => {
@@ -135,38 +148,39 @@ export default function NewService(props) {
             }}
             autoComplete="off"
           />
-          {bid != 1 &&
+          {bid != 1 && (
             <Box sx={{ minWidth: 120, marginTop: 1 }}>
-            <FormControl fullWidth>
-              <InputLabel id="category-label">Category</InputLabel>
-              <Select
-                labelId="ServiceCategory"
-                id="ServiceCategory"
-                value={serviceCategory}
-                label="ServiceCategory"
-                onChange={(e) => setCategory(e.target.value)}
-              >
-                <MenuItem value={"Graphics & Design"}>
-                  {"Graphics & Design"}
-                </MenuItem>
-                <MenuItem value={"Digital Marketing"}>
-                  {"Digital Marketing"}
-                </MenuItem>
-                <MenuItem value={"Writing & Translation"}>
-                  {"Writing & Translation"}
-                </MenuItem>
-                <MenuItem value={"Video & Animation"}>
-                  {"Video & Animation"}
-                </MenuItem>
-                <MenuItem value={"Music & Audio"}>{"Music & Audio"}</MenuItem>
-                <MenuItem value={"Programming & Tech"}>
-                  {"Programming & Tech"}
-                </MenuItem>
-                <MenuItem value={"Business"}>{"Business"}</MenuItem>
-                <MenuItem value={"Lifestyle"}>{"Lifestyle"}</MenuItem>
-              </Select>
-            </FormControl>
-          </Box>}
+              <FormControl fullWidth>
+                <InputLabel id="category-label">Category</InputLabel>
+                <Select
+                  labelId="ServiceCategory"
+                  id="ServiceCategory"
+                  value={serviceCategory}
+                  label="ServiceCategory"
+                  onChange={(e) => setCategory(e.target.value)}
+                >
+                  <MenuItem value={"Graphics & Design"}>
+                    {"Graphics & Design"}
+                  </MenuItem>
+                  <MenuItem value={"Digital Marketing"}>
+                    {"Digital Marketing"}
+                  </MenuItem>
+                  <MenuItem value={"Writing & Translation"}>
+                    {"Writing & Translation"}
+                  </MenuItem>
+                  <MenuItem value={"Video & Animation"}>
+                    {"Video & Animation"}
+                  </MenuItem>
+                  <MenuItem value={"Music & Audio"}>{"Music & Audio"}</MenuItem>
+                  <MenuItem value={"Programming & Tech"}>
+                    {"Programming & Tech"}
+                  </MenuItem>
+                  <MenuItem value={"Business"}>{"Business"}</MenuItem>
+                  <MenuItem value={"Lifestyle"}>{"Lifestyle"}</MenuItem>
+                </Select>
+              </FormControl>
+            </Box>
+          )}
           <TextField
             error={!priceReq}
             helperText={priceReq ? "" : "This field cannot be empty."}
@@ -182,6 +196,23 @@ export default function NewService(props) {
             }}
             autoComplete="off"
           />
+          {bid === 1 && (
+            <TextField
+              error={!daysReq}
+              helperText={daysReq ? "" : "This field cannot be empty."}
+              required
+              margin="normal"
+              id="Deadline_Days"
+              label="Deadline Days"
+              type="number"
+              value={days}
+              onChange={(e) => {
+                setDays(e.target.value);
+                setDaysReq(true);
+              }}
+              autoComplete="off"
+            />
+          )}
         </DialogContent>
 
         <DialogActions>
