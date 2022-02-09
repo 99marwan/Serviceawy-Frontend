@@ -87,9 +87,13 @@ export default function NewService(props) {
         setCategory("Graphics & Design");
         setPrice("");
         setDays("");
-        window.location.reload();
         setOpen(false);
+        if (bid === 1)
+          history.push("/custom_services");
+        window.location.reload();
+        
       });
+
     }    
   }
 

@@ -106,9 +106,7 @@ const ServiceDetails = (props) => {
                   }
                   titleTypographyProps={{ variant: "h5" }}
                   title={
-                    bid !== 1
-                      ? service.providername
-                      : service.requestername
+                    bid !== 1 ? service.providername : service.requestername
                   }
                 />
               </Box>
@@ -207,7 +205,7 @@ const ServiceDetails = (props) => {
               {ReactSession.get("username") !== service.requestername &&
                 ReactSession.get("type") != "Manager" &&
                 bid === 1 &&
-                tab != 5 && <NewService bid={1} />}
+                tab != 5 && <NewService bid={1} id={service.customserviceid} />}
             </CardActions>
 
             {ReactSession.get("type") === "Manager" && (

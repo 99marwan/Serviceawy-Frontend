@@ -23,7 +23,7 @@ const ServiceCards = (props) => {
   const title = props.title;
   const pageNum = props.pageNum;
   const tab = props.tab;
-  const page = props.page
+  const page = props.page;
 
 
   const handleClick = (value) => (event) => {
@@ -208,7 +208,7 @@ const ServiceCards = (props) => {
                         justifyContent: "center",
                       }}
                     >
-                      <Bids id={service.customserviceid} />
+                    <Bids id={service.customserviceid}/>
                     </CardActions>
                   )}
 

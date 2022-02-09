@@ -54,6 +54,7 @@ export default function Bids(props) {
         body: JSON.stringify(bid),
       }).then(() => {
         console.log("bid Rejected");
+        setOpen(false)
         window.location.reload();
       });
     };
