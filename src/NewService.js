@@ -16,6 +16,7 @@ export default function NewService(props) {
 
   const page = props.page;
   const bid = props.bid;
+  const customserviceid = props.id;
 
   const providername = ReactSession.get("username");
 
@@ -47,7 +48,32 @@ export default function NewService(props) {
         accepted
       };
       url = "http://localhost:8085/user/addNormalService"
+      ReactSession.set("added", true);
     }
+    else if (page === "Custom") {
+        service = {
+          serviceDescription,
+          serviceCategory,
+          requestername : providername,
+          maxprice : price,
+          accepted,
+          bidaccepted : 0
+        };
+      url = "http://localhost:8085/user/addCustomService";
+      ReactSession.set("added", true);
+    
+  }
+  else if(bid === 1){
+      service = {
+          customserviceid,
+          bidDescription: serviceDescription,
+          providername,
+          price,
+          daystocomplete: days,
+        };
+      url = "http://localhost:8085/user/addBid";
+      ReactSession.set("bid", true);
+  }
     
 
     if (serviceDescription != "" && price != "") {
@@ -62,7 +88,6 @@ export default function NewService(props) {
         setPrice("");
         setDays("");
         window.location.reload();
-        ReactSession.set("added", true);
         setOpen(false);
       });
     }    
@@ -109,11 +134,9 @@ export default function NewService(props) {
           sx={{ mt: 3, mr: 4, background: "#bd814b" }}
           onClick={handleClickOpen}
         >
-          {bid === 1
-            ? "Add Bid"
-            : page === "Home"
-            ? "Add Service"
-            : "Add Custom Service"}
+          {bid === 1 ? "Add Bid" :
+            page === "Home" ? "Add Service" :
+            "Add Custom Service"}
         </Button>
       </div>
       <Dialog open={open} onClose={handleClose}>

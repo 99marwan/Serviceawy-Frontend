@@ -34,7 +34,11 @@ const ServiceCards = (props) => {
   const handleAccept = (service) => {
     console.log(service);
     service.accepted = true;
-    fetch("http://localhost:8085/manager/acceptRejectNormalService", {
+    const url =
+      page === "Home"
+        ? "http://localhost:8085/manager/acceptRejectNormalService"
+        : "http://localhost:8085/manager/acceptRejectCustomService";
+    fetch(url, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(service),
@@ -44,7 +48,11 @@ const ServiceCards = (props) => {
     });
   };
   const handleDecline = (service) => {
-    fetch("http://localhost:8085/manager/acceptRejectNormalService", {
+    const url =
+      page === "Home"
+        ? "http://localhost:8085/manager/acceptRejectNormalService"
+        : "http://localhost:8085/manager/acceptRejectCustomService";
+    fetch(url, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(service),
@@ -69,7 +77,15 @@ const ServiceCards = (props) => {
         {/* End hero unit */}
         <Grid container spacing={2}>
           {services.map((service) => (
-            <Grid item key={service.serviceid} xs={6} sm={4} md={4}>
+            <Grid
+              item
+              key={
+                page === "Home" ? service.serviceid : service.customserviceid
+              }
+              xs={6}
+              sm={4}
+              md={4}
+            >
               <Card
                 sx={{
                   height: "100%",
@@ -84,8 +100,8 @@ const ServiceCards = (props) => {
                     page === "Home"
                       ? `/services/${service.serviceid}`
                       : tab === 5
-                      ? `/account_custom_services/${service.serviceid}`
-                      : `/custom_services/${service.serviceid}`
+                      ? `/account_custom_services/${service.customserviceid}`
+                      : `/custom_services/${service.customserviceid}`
                   }
                   style={{ textDecoration: "none", color: "#535049" }}
                   onClick={handleClick(service)}
@@ -98,7 +114,11 @@ const ServiceCards = (props) => {
                           aria-label="recipe"
                         ></Avatar>
                       }
-                      title={service.providername}
+                      title={
+                        page === "Home"
+                          ? service.providername
+                          : service.requestername
+                      }
                     />
                   )}
                   {(tab === 0 || tab === 5) && (
@@ -122,7 +142,7 @@ const ServiceCards = (props) => {
                       gutterBottom
                       variant="subtitle2"
                       component="div"
-                      sx={{ fontSize: 16 }}
+                      sx={{ fontSize: 16, fontWeight: "bold" }}
                     >
                       {service.serviceDescription}
                     </Typography>
@@ -159,32 +179,38 @@ const ServiceCards = (props) => {
                         fontSize: 16,
                       }}
                     >
-                      {service.price + "$"}
+                      {(page === "Home" ? service.price : service.maxprice) +
+                        "$"}
                     </Typography>
                   </Container>
                 </Link>
 
-                {page === "Custom" && tab != 5 && (
-                  <CardActions
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <NewService bid={1} />
-                  </CardActions>
-                )}
+                {ReactSession.get("type") != "Manager" &&
+                  page === "Custom" &&
+                  tab != 5 &&
+                  ReactSession.get("username") != service.requestername && (
+                    <CardActions
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <NewService bid={1} id={service.customserviceid} />
+                    </CardActions>
+                  )}
 
-                {page === "Custom" && tab === 5 && (
-                  <CardActions
-                    sx={{
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <Bids />
-                  </CardActions>
-                )}
+                {ReactSession.get("type") != "Manager" &&
+                  page === "Custom" &&
+                  tab === 5 && (
+                    <CardActions
+                      sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                      }}
+                    >
+                      <Bids id={service.customserviceid} />
+                    </CardActions>
+                  )}
 
                 {ReactSession.get("type") === "Manager" && (
                   <CardActions

@@ -1,17 +1,15 @@
 import { useEffect, useState } from "react";
 import { ReactSession } from "react-client-session";
 
-const useFetch = (url,currentPage, category) => {
+const useFetch = (url, currentPage, category) => {
   const [data, setData] = useState(null);
   const [isPending, setIsPendig] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    console.log({ url });
     const abortCont = new AbortController();
 
     setTimeout(() => {
-      console.log({ url });
       fetch(url, { signal: abortCont.signal })
         .then((res) => {
           console.log("enter");

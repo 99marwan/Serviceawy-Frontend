@@ -1,13 +1,12 @@
 import useFetch from "./useFetch";
 import ServiceCards from "./ServiceCards";
-import { Button, Pagination } from "@mui/material";
+import { Pagination } from "@mui/material";
 import NewService from "./NewService";
 import { ReactSession } from "react-client-session";
 import { useEffect, useState } from "react";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import CategoryBar from "./CategoryBar";
 import AlertsBar from "./AlertsBar";
-import Bids from "./Bids";
 
 const CustomServices = () => {
   const [pageNum, setPageNum] = useState(0);
@@ -28,7 +27,7 @@ const CustomServices = () => {
 
   useEffect(() => {
     fetch(
-      `http://localhost:8085/service/getPagesNum/${
+      `http://localhost:8085/CustomService/getPagesNum/${
         ReactSession.get("type") === "Manager" ? "false" : "true"
       }/${category}`
     )
@@ -50,9 +49,9 @@ const CustomServices = () => {
     isPending,
     error,
   } = useFetch(
-    `http://localhost:8085/service/loadServices/${currentPage}/${category}/${
+    `http://localhost:8085/CustomService/loadCustomServices/${currentPage}/${category}/${
       ReactSession.get("type") === "Manager" ? "false" : "true"
-    }`,
+    }/false`,
     currentPage,
     category
   );
@@ -62,7 +61,7 @@ const CustomServices = () => {
     <div className="custom_services">
       <ThemeProvider theme={theme}>
         <CategoryBar setCategory={setCategory} />
-        <AlertsBar />
+        <AlertsBar page={"Custom"}/>
 
         {isPending && <div>Loading....</div>}
     

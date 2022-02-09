@@ -6,9 +6,8 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { ReactSession } from "react-client-session";
-import { styled } from "@mui/material/styles";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemAvatar from "@mui/material/ListItemAvatar";
@@ -17,29 +16,18 @@ import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Grid from "@mui/material/Grid";
-import FolderIcon from "@mui/icons-material/Folder";
 import ListRoundedIcon from "@mui/icons-material/ListRounded";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
+import useFetch from "./useFetch";
 
+export default function Bids(props) {
+  const id = props.id;
 
-function generate(element) {
-  return [0, 1, 2].map((value) =>
-    React.cloneElement(element, {
-      key: value,
-    })
-  );
-}
+  const { data: bids } = useFetch(`http://localhost:8085/user/loadBids/${id}`);
 
-
-export default function Bids() {
- 
-  const providername = ReactSession.get("username");
-
-    const [open, setOpen] = useState(false);
-    const [dense, setDense] = React.useState(false);
-    const [secondary, setSecondary] = React.useState(false);
-    
+  const [open, setOpen] = useState(false);
+  const [dense, setDense] = React.useState(false);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -49,9 +37,30 @@ export default function Bids() {
     setOpen(false);
   };
 
+    const handleAccept = (bid) => {
+      fetch("http://localhost:8085/user/acceptRejectBid/true", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bid),
+      }).then(() => {
+        console.log("bid Accepted");
+        window.location.reload();
+      });
+    };
+    const handleDecline = (bid) => {
+      fetch("http://localhost:8085/user/acceptRejectBid/false", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(bid),
+      }).then(() => {
+        console.log("bid Rejected");
+        window.location.reload();
+      });
+    };
 
   return (
     <div>
+      {console.log(bids)}
       <div
         style={{
           display: "flex",
@@ -68,70 +77,61 @@ export default function Bids() {
           List
         </Button>
       </div>
-      <Dialog fullScreen open={open} onClose={handleClose}>
-        <DialogTitle>Bids</DialogTitle>
-        <DialogContent
-          sx={{
-            display: "flex",
-            flexDirection: "column",
-          }}
-        >
-          <DialogContentText>List Of Bids</DialogContentText>
+      {open && (
+        <Dialog fullScreen open={open} onClose={handleClose}>
+          <DialogTitle>Bids</DialogTitle>
+          <DialogContent
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+            }}
+          >
+            <DialogContentText>List Of Bids</DialogContentText>
 
-          <Grid item>
-            <List dense={dense}>
-              <ListItem>
-                <ListItemText primary="Service Provider" />
-                <ListItemText primary="Service Description" />
+            <Grid item>
+              <List dense={dense}>
+                {bids.map((bid) => (
+                  <ListItem key={bid.bidid}>
+                    <ListItemAvatar>
+                      <Avatar
+                        alt={ReactSession.get("username")}
+                        src="/broken-image.jpg"
+                        sx={{ bgcolor: "#678983" }}
+                      ></Avatar>
+                    </ListItemAvatar>
+                    <ListItemText width={100} primary={bid.providername} />
+                    <ListItemText width={100} primary={bid.bidDescription} />
+                    <ListItemText width={100} primary={bid.daystocomplete} />
+                    <ListItemText width={100} primary={bid.price} />
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        aria-label="accept"
+                        color="success"
+                        onClick={() => handleAccept(bid)}
+                      >
+                        <DoneIcon />
+                      </IconButton>
+                      <IconButton
+                        edge="end"
+                        aria-label="decline"
+                        color="error"
+                        onClick={() => handleDecline(bid)}
+                      >
+                        <CloseIcon />
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </ListItem>
+                ))}
+              </List>
+            </Grid>
+          </DialogContent>
 
-                <ListItemText primary="Days To Done" />
-
-                <ListItemText primary="Price" />
-              </ListItem>
-              {generate(
-                <ListItem>
-                  <ListItemAvatar>
-                    <Avatar>
-                      <FolderIcon />
-                    </Avatar>
-                  </ListItemAvatar>
-                  <ListItemText
-                    primary="Single-line item"
-                    secondary={secondary ? "Secondary text" : null}
-                  />
-                  <ListItemText
-                    primary="Single-line item"
-                    secondary={secondary ? "Secondary text" : null}
-                  />
-
-                  <ListItemText
-                    primary="Single-line item"
-                    secondary={secondary ? "Secondary text" : null}
-                  />
-
-                  <ListItemText
-                    primary="Single-line item"
-                    secondary={secondary ? "Secondary text" : null}
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton edge="end" aria-label="accept" color="success">
-                      <DoneIcon />
-                    </IconButton>
-                    <IconButton edge="end" aria-label="decline" color="error">
-                      <CloseIcon />
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              )}
-            </List>
-          </Grid>
-        </DialogContent>
-    
-
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-        </DialogActions>
-      </Dialog>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+          </DialogActions>
+        </Dialog>
+      )}
     </div>
   );
 }

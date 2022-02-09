@@ -19,6 +19,9 @@ import ServiceCards from "./ServiceCards";
 import useFetch from "./useFetch";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import TransactionCards from "./TransactionCards";
+import DashboardCustomizeIcon from '@mui/icons-material/DashboardCustomize';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 
 const AccountPage = () => {
   const [value, setValue] = useState(0);
@@ -66,8 +69,20 @@ const AccountPage = () => {
         )}/PENDING`
       );
     } else if (newValue === 5) {
-      setUrlService(
-        `http://localhost:8085/user/loadServices/marwansaad`
+      setUrlService(`http://localhost:8085/user/loadCustomServices/${ReactSession.get(
+          "username"
+        )}`);
+    } else if (newValue === 7) {
+      setUrl(
+        `http://localhost:8085/CustomTrans/providedCustomTrans/${ReactSession.get(
+          "userid"
+        )}/DONE`
+      );
+    } else if (newValue === 6) {
+      setUrl(
+        `http://localhost:8085/CustomTrans/requestedCustomTrans/${ReactSession.get(
+          "username"
+        )}/DONE`
       );
     }
   };
@@ -90,7 +105,7 @@ const AccountPage = () => {
     "random"
   ); 
   const { data: transactions} = useFetch(url, 1, "random"); 
-  console.log(services)
+  console.log(transactions);
 
   return (
     <div className="account-page">
@@ -138,6 +153,8 @@ const AccountPage = () => {
                   indicatorColor="primary"
                   textColor="secondary"
                   sx={{ background: "1A5F7A" }}
+                  variant="scrollable"
+                  scrollButtons="auto"
                 >
                   <Tab icon={<AssignmentIndIcon />} label="My Services" />
                   <Tab icon={<CheckCircleIcon />} label="Services Done" />
@@ -151,9 +168,14 @@ const AccountPage = () => {
                     label="Orders Pending"
                   />
                   <Tab
-                    icon={<DryCleaningOutlinedIcon />}
+                    icon={<DashboardCustomizeIcon />}
                     label="Custom Services"
                   />
+                  <Tab
+                    icon={<ArrowBackIcon />}
+                    label="C.Transactions requestd"
+                  />
+                  <Tab icon={<ArrowForwardIcon />} label="C.Transactions provided" />
                 </Tabs>
               </Container>
               {(value === 0 || value == 5) && services && (

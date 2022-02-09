@@ -3,10 +3,11 @@ import { useState } from "react";
 import { Alert, Collapse } from "@mui/material";
 
 
-const AlertsBar = () => {
+const AlertsBar = (props) => {
+  const page = props.page
   const [alertBought, setAlertBought] = useState(ReactSession.get("bought"));
-    const [alertAdded, setAlertAdded] = useState(ReactSession.get("added"));
-    
+  const [alertAdded, setAlertAdded] = useState(ReactSession.get("added"));
+  const [alertBid, setAlertBid] = useState(ReactSession.get("bid"));
     return (
       <div className="alerts-bar">
         <Collapse in={alertBought}>
@@ -27,7 +28,17 @@ const AlertsBar = () => {
               setAlertAdded(false);
             }}
           >
-            Service is Added and in pending state now
+            {page === "Custom" ? "Custom " : ""} Service is Added and in pending state now
+          </Alert>
+        </Collapse>
+        <Collapse in={alertBid}>
+          <Alert
+            onClose={() => {
+              ReactSession.set("bid", false);
+              setAlertBid(false);
+            }}
+          >
+            bid is Added 
           </Alert>
         </Collapse>
       </div>

@@ -105,7 +105,11 @@ const ServiceDetails = (props) => {
                     ></Avatar>
                   }
                   titleTypographyProps={{ variant: "h5" }}
-                  title={service.providername}
+                  title={
+                    bid !== 1
+                      ? service.providername
+                      : service.requestername
+                  }
                 />
               </Box>
 
@@ -182,7 +186,7 @@ const ServiceDetails = (props) => {
               <Typography gutterBottom variant="h6">
                 {bid != 1
                   ? "Price:   " + service.price + "$"
-                  : "Upper Price:   " + service.price + "$"}
+                  : "Upper Price:   " + service.maxprice + "$"}
               </Typography>
               {ReactSession.get("username") !== service.providername &&
                 ReactSession.get("type") != "Manager" &&
@@ -200,9 +204,10 @@ const ServiceDetails = (props) => {
                     buy
                   </Button>
                 )}
-              {ReactSession.get("username") !== service.providername &&
+              {ReactSession.get("username") !== service.requestername &&
                 ReactSession.get("type") != "Manager" &&
-                bid === 1 && tab != 5 &&<NewService bid={1} />}
+                bid === 1 &&
+                tab != 5 && <NewService bid={1} />}
             </CardActions>
 
             {ReactSession.get("type") === "Manager" && (

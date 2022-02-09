@@ -62,7 +62,7 @@ const Home = () => {
       <div className="home">
         <ThemeProvider theme={theme}>
           <CategoryBar setCategory={setCategory} />
-          <AlertsBar />
+          <AlertsBar page="Home"/>
           {/*error && <div>{error}</div>*/}
           {isPending && <div>Loading....</div>}
           {/*as blogs it null until fetch finished

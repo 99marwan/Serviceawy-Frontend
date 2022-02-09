@@ -13,11 +13,7 @@ import {
   Stack,
   Typography,
 } from "@mui/material";
-import NewService from "./NewService";
-import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { ReactSession } from "react-client-session";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
+
 
 const TransactionCards = (props) => {
   const transactions = props.transactions;
@@ -67,80 +63,85 @@ const TransactionCards = (props) => {
                   color: "#535049",
                 }}
               >
-                
-                  {tab != 1 && tab != 2 && (
-                    <CardHeader
-                      avatar={
-                        <Avatar
-                          sx={{ width: 24, height: 24 }}
-                          aria-label="recipe"
-                        ></Avatar>
-                      }
-                      title={transaction.service.providername}
-                    />
-                  )}
-                  
-                  <CardMedia
-                    component="img"
-                    height={180}
-                    image="https://picsum.photos/400/300"
-                    alt="random"
+                {tab < 3 && tab > 5 && (
+                  <CardHeader
+                    avatar={
+                      <Avatar
+                        sx={{ width: 24, height: 24 }}
+                        aria-label="recipe"
+                      ></Avatar>
+                    }
+                    title={transaction.service.providername}
                   />
-                  <CardContent sx={{ flexGrow: 1 }}>
-                    <Typography
-                      gutterBottom
-                      variant="subtitle2"
-                      component="div"
-                      sx={{ fontSize: 16 }}
-                    >
-                      {transaction.service.serviceDescription}
-                          </Typography>
-                         
-                  {(tab === 1 || tab === 2 ) &&<Typography
+                )}
+
+                <CardMedia
+                  component="img"
+                  height={180}
+                  image="https://picsum.photos/400/300"
+                  alt="random"
+                />
+                <CardContent sx={{ flexGrow: 1 }}>
+                  <Typography
                     gutterBottom
                     variant="subtitle2"
                     component="div"
-                    sx={{ fontSize: 16 }}
+                    sx={{ fontSize: 16, fontWeight: "bold" }}
                   >
-                    customer
-                  </Typography>}
-                  </CardContent>
+                    {transaction.service.serviceDescription}
+                  </Typography>
 
-                  <hr
-                    style={{
-                      width: "100%",
-                    }}
-                  />
-                  <Container
-                    style={{
-                      display: "flex",
-                      flexDirection: "row",
-                      justifyContent: "space-between",
-                    }}
-                  >
+                  {(tab < 3 || tab == 6) && (
                     <Typography
                       gutterBottom
                       variant="subtitle2"
                       component="div"
-                      sx={{ fontFamily: "Monospace", fontSize: 16 }}
+                      sx={{ fontSize: 16, color: "#bd814b" }}
                     >
-                      {transaction.service.serviceCategory}
+                      {tab === 6
+                        ? transaction.service.requestername
+                        : "customer"}
                     </Typography>
+                  )}
+                </CardContent>
 
-                    <Typography
-                      gutterBottom
-                      variant="subtitle2"
-                      component="div"
-                      sx={{
-                        fontWeight: "bold",
-                        fontFamily: "Monospace",
-                        fontSize: 16,
-                      }}
-                    >
-                      {transaction.service.price + "$"}
-                    </Typography>
-                  </Container>
-            
+                <hr
+                  style={{
+                    width: "100%",
+                  }}
+                />
+                <Container
+                  style={{
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                  }}
+                >
+                  <Typography
+                    gutterBottom
+                    variant="subtitle2"
+                    component="div"
+                    sx={{ fontFamily: "Monospace", fontSize: 16 }}
+                  >
+                    {transaction.service.serviceCategory}
+                  </Typography>
+
+                  <Typography
+                    gutterBottom
+                    variant="subtitle2"
+                    component="div"
+                    sx={{
+                      fontWeight: "bold",
+                      fontFamily: "Monospace",
+                      fontSize: 16,
+                    }}
+                  >
+                    {tab < 6
+                      ? transaction.service.price + "$"
+                      : transaction.service.maxprice + "$"}
+                  </Typography>
+                </Container>
+
                 {tab == 2 && (
                   <CardActions
                     sx={{
@@ -163,8 +164,7 @@ const TransactionCards = (props) => {
                       Accept
                     </Button>
                   </CardActions>
-                      )}
-                      
+                )}
               </Card>
             </Grid>
           ))}
